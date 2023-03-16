@@ -26,6 +26,9 @@ public class Nodoku {
 			}
 		}
 	}
+	
+	blabla()
+	
 	private static int[] instanciarArregloConCeros(int tamanio) {
 		int[] nuevoArreglo = new int[tamanio];
 		
