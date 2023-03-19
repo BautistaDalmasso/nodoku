@@ -14,8 +14,8 @@ public class Nodoku {
 		/* Genera las listas de sumas esperadas de modo que el juego tenga solución. */
 		Random rand = new Random();
 		
-		this.sumasEsperadasPorColumna = Nodoku.instanciarArregloConCeros(anchoGrilla);
-		this.sumasEsperadasPorFila = Nodoku.instanciarArregloConCeros(largoGrilla);
+		this.sumasEsperadasPorColumna = new int[anchoGrilla];
+		this.sumasEsperadasPorFila = new int[largoGrilla];
 		
 		for(int columna=0; columna<anchoGrilla; columna++) {
 			for(int fila=0; fila<largoGrilla; fila++) {
@@ -25,13 +25,5 @@ public class Nodoku {
 				sumasEsperadasPorFila[fila] += numeroCelda;
 			}
 		}
-	}
-	private static int[] instanciarArregloConCeros(int tamanio) {
-		int[] nuevoArreglo = new int[tamanio];
-		
-		for (int i = 0; i < tamanio; i++) {
-			nuevoArreglo[i] = 0;
-		}
-		return nuevoArreglo;
 	}
 }
