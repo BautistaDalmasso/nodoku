@@ -6,4 +6,5 @@
  *
  */
 module nodoku {
+	requires java.desktop;
 }
