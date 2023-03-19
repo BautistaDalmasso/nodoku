@@ -241,14 +241,14 @@ public class InterfazNodoku {
 	
 	public void mostrar_consigna()
 	{
-		Integer columnas[] = juego.get_columnas_sumadas();
-		Integer filas[] = juego.get_filas_sumadas();
+		int columnas[] = juego.getSumasEsperadasPorColumna();
+		int filas[] = juego.getSumasEsperadasPorFila();
 		sumas_columnas = new Label[columnas.length];
 		sumas_filas = new Label[filas.length];
 		
 		for (int c = 0; c < columnas.length; c ++)
 		{
-			sumas_columnas[c] = new Label(filas[c].toString());
+			sumas_columnas[c] = new Label(Integer.toString(filas[c]));
 			sumas_columnas[c].setBounds(filas.length * 50, c * 50, 50, 50);
 			sumas_columnas[c].setAlignment(1);
 			ventana_principal.getContentPane().add(sumas_columnas[c]);
@@ -256,7 +256,7 @@ public class InterfazNodoku {
 		
 		for (int f = 0; f < filas.length; f ++)
 		{
-			sumas_filas[f] = new Label(columnas[f].toString());
+			sumas_filas[f] = new Label(Integer.toString(columnas[f]));
 			sumas_filas[f].setBounds(f * 50, columnas.length * 50, 50, 50);
 			sumas_filas[f].setAlignment(1);
 			ventana_principal.getContentPane().add(sumas_filas[f]);

@@ -3,16 +3,19 @@ package nodoku;
 import java.util.Random;
 
 public class Nodoku {
-	int anchoGrilla;
-	int largoGrilla;
-	int valorMaximoCelda;
-	int[] sumasEsperadasPorFila;
-	int[] sumasEsperadasPorColumna;
+	private int anchoGrilla;
+	private int largoGrilla;
+	private int valorMaximoCelda;
+	private int[] sumasEsperadasPorFila;
+	private int[] sumasEsperadasPorColumna;
+	
+	private final int VALOR_MAXIMO_DEFECTO = 4;
 	
 	public Nodoku(int tamanio) {
 		/* Crea un tablero de Nodoku cuadrado de tamanio x tamanio. */
 		anchoGrilla = tamanio;
 		largoGrilla = tamanio;
+		valorMaximoCelda = VALOR_MAXIMO_DEFECTO;
 		
 		generarJuego();
 	}
@@ -34,4 +37,14 @@ public class Nodoku {
 			}
 		}
 	}
+
+	public int[] getSumasEsperadasPorFila() {
+		return sumasEsperadasPorFila;
+	}
+
+	public int[] getSumasEsperadasPorColumna() {
+		return sumasEsperadasPorColumna;
+	}
+	
+	
 }
