@@ -8,6 +8,8 @@ import javax.swing.JFrame;
 import javax.swing.JMenuBar;
 import javax.swing.JMenu;
 import javax.swing.UIManager;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.JTextField;
 import java.awt.Dimension;
 import javax.swing.JMenuItem;
@@ -230,12 +232,40 @@ public class InterfazNodoku {
 		{
 			for (int y = 0; y < tamanio_grilla; y++)
 			{
-				casilleros[y][x] =  new JTextField();
-				casilleros[y][x].setHorizontalAlignment(JTextField.CENTER);
-				casilleros[y][x].setBounds(x*50, y*50, 47, 47);
+				casilleros[y][x] = crearCelda(x, y);
+				
 				ventanaPrincipal.getContentPane().add(casilleros[y][x]);
 			}
 		}
+	}
+	
+	private JTextField crearCelda(int x, int y) {
+		JTextField celda = new JTextField();
+		
+		celda.setHorizontalAlignment(JTextField.CENTER);
+		celda.setBounds(x*50, y*50, 47, 47);
+		agregarDocumentListener(celda);
+		
+		return celda;
+	}
+	
+	private void agregarDocumentListener(JTextField celda) {
+		celda.getDocument().addDocumentListener(new DocumentListener() {
+			@Override
+			public void insertUpdate(DocumentEvent e) {
+				changedUpdate(e);
+			}
+			@Override
+			public void removeUpdate(DocumentEvent e) {
+				changedUpdate(e);
+			}
+			@Override
+			public void changedUpdate(DocumentEvent e) {
+				// Llamado cada vez que el contenido de una celda cambia.
+				System.out.println("IMPLEMENTAME.");
+				System.out.println("TAMBIEN IMPLEMENTA ALGO PARA CHEQUEAR VALORES VALIDOS.");
+			}
+		});
 	}
 	
 	public void mostrarValoresEsperados()
