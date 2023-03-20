@@ -230,11 +230,10 @@ public class InterfazNodoku {
 		{
 			for (int y = 0; y < tamanio_grilla; y++)
 			{
-				casilleros[x][y] =  new JTextField();
-				casilleros[x][y].setHorizontalAlignment(JTextField.CENTER);
-			//	casilleros[x][y].setText("0");
-				casilleros[x][y].setBounds(x*50, y*50, 47, 47);
-				ventanaPrincipal.getContentPane().add(casilleros[x][y]);
+				casilleros[y][x] =  new JTextField();
+				casilleros[y][x].setHorizontalAlignment(JTextField.CENTER);
+				casilleros[y][x].setBounds(x*50, y*50, 47, 47);
+				ventanaPrincipal.getContentPane().add(casilleros[y][x]);
 			}
 		}
 	}
@@ -280,7 +279,7 @@ public class InterfazNodoku {
 		{
 			for (int y = 0; y < casilleros.length; y++)
 			{
-				ventanaPrincipal.getContentPane().remove(casilleros[x][y]);
+				ventanaPrincipal.getContentPane().remove(casilleros[y][x]);
 			}
 		}	
 	}
