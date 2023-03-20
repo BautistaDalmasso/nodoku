@@ -61,5 +61,12 @@ public class Nodoku {
 		return sumasEsperadasPorColumna;
 	}
 	
+	public boolean filaEstaResuelta(int y) {
+		return sumasRealizadasPorFila[y] == sumasEsperadasPorFila[y];
+	}
+	
+	public boolean columnaEstaResuelta(int y) {
+		return sumasRealizadasPorColumna[y] == sumasEsperadasPorColumna[y];
+	}
 	
 }

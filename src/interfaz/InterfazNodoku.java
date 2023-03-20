@@ -239,6 +239,13 @@ public class InterfazNodoku {
 	
 	private void cambiarValorGrilla(int valor, int x, int y) {
 		juego.cambiarValorGrilla(valor, x, y);
+		
+		if (juego.filaEstaResuelta(y)) {
+			System.out.println("Fila resuelta.");
+		}
+		if (juego.columnaEstaResuelta(x)) {
+			System.out.println("Columna resuelta.");
+		}
 	}
 	
 	private JTextField crearCelda(int x, int y) {
