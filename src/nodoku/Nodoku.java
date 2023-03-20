@@ -3,11 +3,30 @@ package nodoku;
 import java.util.Random;
 
 public class Nodoku {
-	int anchoGrilla;
-	int largoGrilla;
-	int valorMaximoCelda;
-	int[] sumasEsperadasPorFila;
-	int[] sumasEsperadasPorColumna;
+	private int anchoGrilla;
+	private int largoGrilla;
+	private int valorMaximoCelda;
+	private int[] sumasEsperadasPorFila;
+	private int[] sumasEsperadasPorColumna;
+	
+	private int[][] grilla;
+	private int[] sumasRealizadasPorFila;
+	private int[] sumasRealizadasPorColumna;
+	
+	private final int VALOR_MAXIMO_DEFECTO = 4;
+	
+	public Nodoku(int tamanio) {
+		/* Crea un tablero de Nodoku cuadrado de tamanio x tamanio. */
+		anchoGrilla = tamanio;
+		largoGrilla = tamanio;
+		valorMaximoCelda = VALOR_MAXIMO_DEFECTO;
+		
+		grilla = new int[tamanio][tamanio];
+		sumasRealizadasPorFila = new int[tamanio];
+		sumasRealizadasPorColumna = new int[tamanio];
+		
+		generarJuego();
+	}
 	
 	private void generarJuego()
 	{
@@ -26,4 +45,28 @@ public class Nodoku {
 			}
 		}
 	}
+
+	public void cambiarValorGrilla(int valor, int x, int y) {
+		int valorAnterior = grilla[y][x];
+		
+		sumasRealizadasPorFila[y] += valor - valorAnterior;
+		sumasRealizadasPorColumna[x] += valor - valorAnterior;
+	}
+	
+	public int[] getSumasEsperadasPorFila() {
+		return sumasEsperadasPorFila;
+	}
+
+	public int[] getSumasEsperadasPorColumna() {
+		return sumasEsperadasPorColumna;
+	}
+	
+	public boolean filaEstaResuelta(int y) {
+		return sumasRealizadasPorFila[y] == sumasEsperadasPorFila[y];
+	}
+	
+	public boolean columnaEstaResuelta(int y) {
+		return sumasRealizadasPorColumna[y] == sumasEsperadasPorColumna[y];
+	}
+	
 }

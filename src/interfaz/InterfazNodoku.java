@@ -8,6 +8,8 @@ import javax.swing.JFrame;
 import javax.swing.JMenuBar;
 import javax.swing.JMenu;
 import javax.swing.UIManager;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.JTextField;
 import java.awt.Dimension;
 import javax.swing.JMenuItem;
@@ -17,17 +19,17 @@ import java.awt.event.ActionEvent;
 
 public class InterfazNodoku {
 	private Nodoku juego;
-	private JFrame ventana_principal;
+	private JFrame ventanaPrincipal;
 	private JTextField casilleros[][];
-	private Label sumas_filas[];
-	private Label sumas_columnas[];
+	private Label sumasEsperadasPorFila[];
+	private Label sumasEsperadasPorColumna[];
 //	private int grilla[][];
 	private enum NivelJuego {Fácil, Medio, Difícil, Personalizado};
 	private NivelJuego nivel;
 	private final int TAMANIO_FACIL = 4;
 	private final int TAMANIO_MEDIO = 6;
 	private final int TAMANIO_DIFICIL = 8;
-	private int tamanio_personalizado;
+	private int tamanioPersonalizado;
 	private final int ALTO_VENTANA_FACIL = 310;
 	private final int ANCHO_VENTANA_FACIL = 260;
 	private final int ALTO_VENTANA_MEDIO = 410;
@@ -47,7 +49,7 @@ public class InterfazNodoku {
 				try
 				{
 					InterfazNodoku window = new InterfazNodoku();
-					window.ventana_principal.setVisible(true);
+					window.ventanaPrincipal.setVisible(true);
 				}
 				catch (Exception e)
 				{
@@ -78,18 +80,18 @@ public class InterfazNodoku {
 	{	
 		// Setea la ventana del juego
 		
-		ventana_principal = new JFrame();
-		ventana_principal.getContentPane().setLayout(null);
-		ventana_principal.setResizable(false); // cambio de tamaño no permitido
-		ventana_principal.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		ventanaPrincipal = new JFrame();
+		ventanaPrincipal.getContentPane().setLayout(null);
+		ventanaPrincipal.setResizable(false); // cambio de tamaño no permitido
+		ventanaPrincipal.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		// Al arrancar por primera vez, lo hace en modo fácil ************	
 		nivel = NivelJuego.Fácil;
-		nuevo_juego(nivel);
+		nuevoJuego(nivel);
 		// ***************************************************************
 			
 		JMenuBar barraMenu = new JMenuBar();
-		ventana_principal.setJMenuBar(barraMenu);
+		ventanaPrincipal.setJMenuBar(barraMenu);
 		
 		JMenu mnNuevo = new JMenu("Nuevo juego");
 		barraMenu.add(mnNuevo);
@@ -101,7 +103,7 @@ public class InterfazNodoku {
 			{	
 				limpiarVentana();
 				nivel = NivelJuego.Fácil;
-				nuevo_juego(nivel);
+				nuevoJuego(nivel);
 			}
 		});
 		mnNuevo.add(mnNuevoItemFacil);
@@ -113,7 +115,7 @@ public class InterfazNodoku {
 			{
 				limpiarVentana();
 				nivel = NivelJuego.Medio;
-				nuevo_juego(nivel);
+				nuevoJuego(nivel);
 			}
 		});
 		mnNuevo.add(mnNuevoItemMedio);
@@ -125,7 +127,7 @@ public class InterfazNodoku {
 			{
 				limpiarVentana();
 				nivel = NivelJuego.Difícil;
-				nuevo_juego(nivel);
+				nuevoJuego(nivel);
 			}
 		});
 		mnNuevo.add(mnNuevoItemDificil);
@@ -137,7 +139,7 @@ public class InterfazNodoku {
 			{
 				limpiarVentana();
 				nivel = NivelJuego.Personalizado;
-				nuevo_juego(nivel);
+				nuevoJuego(nivel);
 			}
 		});
 		mnNuevo.add(mnNuevoItemPersonalizado);
@@ -153,7 +155,7 @@ public class InterfazNodoku {
 		mnNuevo.add(mnNuevoItemSalir);	
 	}
 	
-	private void nuevo_juego(NivelJuego nivel)
+	private void nuevoJuego(NivelJuego nivel)
 	{	
 		int tamanio;
 		switch (nivel)
@@ -171,26 +173,24 @@ public class InterfazNodoku {
 			break;
 			
 		case Personalizado:
-			tamanio = get_tamanio_personalizado();
+			tamanio = getTamanioPersonalisado();
 			break;
 			
 		default: throw new RuntimeException("Error de tamaño de ventana");
 		}
 		
 		juego = new Nodoku(tamanio);
-		setear_ventana();
-		crear_casilleros(tamanio);
-		mostrar_consigna();
+		setearVentana();
+		crearCasilleros(tamanio);
+		mostrarValoresEsperados();
 	}
-	
-	// *************************************************
-	
-	private void setear_ventana()
+		
+	private void setearVentana()
 	{
 		// Lee la resolución de la pantalla del dispositivo
-		Dimension resolucion_pantalla = Toolkit.getDefaultToolkit().getScreenSize();
-		int ancho_pantalla = resolucion_pantalla.width;
-		int alto_pantalla  = resolucion_pantalla.height;
+		Dimension resolucionPantalla = Toolkit.getDefaultToolkit().getScreenSize();
+		int anchoPantalla = resolucionPantalla.width;
+		int altoPantalla  = resolucionPantalla.height;
 		// ************************************************
 		
 		int x, y, ancho = 0, alto = 0; // coordenadas y tamaño del Frame
@@ -213,88 +213,128 @@ public class InterfazNodoku {
 			break;
 			
 		case Personalizado:
-			tamanio_personalizado = get_tamanio_personalizado();
-			ancho = tamanio_personalizado * 50 + 60;
-			alto = tamanio_personalizado * 50 + 110;
+			tamanioPersonalizado = getTamanioPersonalisado();
+			ancho = tamanioPersonalizado * 50 + 60;
+			alto = tamanioPersonalizado * 50 + 110;
 		}
 		
-		x = (ancho_pantalla - ancho)/2;
-		y = (alto_pantalla - alto)/2;
-		ventana_principal.setBounds(x, y, ancho, alto);	
+		x = (anchoPantalla - ancho)/2;
+		y = (altoPantalla - alto)/2;
+		ventanaPrincipal.setBounds(x, y, ancho, alto);	
 	}
 	
-	private void crear_casilleros(int tamanio_grilla)
+	private void crearCasilleros(int tamanio_grilla)
 	{		
 		casilleros = new JTextField[tamanio_grilla][tamanio_grilla];		
 		for (int x = 0; x < tamanio_grilla; x++)
 		{
 			for (int y = 0; y < tamanio_grilla; y++)
 			{
-				casilleros[x][y] =  new JTextField();
-				casilleros[x][y].setHorizontalAlignment(JTextField.CENTER);
-			//	casilleros[x][y].setText("0");
-				casilleros[x][y].setBounds(x*50, y*50, 47, 47);
-				ventana_principal.getContentPane().add(casilleros[x][y]);
+				casilleros[y][x] = crearCelda(x, y);
+				
+				ventanaPrincipal.getContentPane().add(casilleros[y][x]);
 			}
 		}
 	}
 	
-	public void mostrar_consigna()
+	private void cambiarValorGrilla(int valor, int x, int y) {
+		juego.cambiarValorGrilla(valor, x, y);
+		
+		if (juego.filaEstaResuelta(y)) {
+			System.out.println("Fila resuelta.");
+		}
+		if (juego.columnaEstaResuelta(x)) {
+			System.out.println("Columna resuelta.");
+		}
+	}
+	
+	private JTextField crearCelda(int x, int y) {
+		JTextField celda = new JTextField();
+		
+		celda.setHorizontalAlignment(JTextField.CENTER);
+		celda.setBounds(x*50, y*50, 47, 47);
+		agregarDocumentListener(celda, x, y);
+		
+		return celda;
+	}
+	
+	private void agregarDocumentListener(JTextField celda, int x, int y) {
+		celda.getDocument().addDocumentListener(new DocumentListener() {
+			@Override
+			public void insertUpdate(DocumentEvent e) {
+				changedUpdate(e);
+			}
+			@Override
+			public void removeUpdate(DocumentEvent e) {
+				changedUpdate(e);
+			}
+			@Override
+			public void changedUpdate(DocumentEvent e) {
+				// Llamado cada vez que el contenido de una celda cambia.
+				int valor = Integer.parseInt(celda.getText());
+				
+				cambiarValorGrilla(valor, x, y);
+				System.out.println("TAMBIEN IMPLEMENTA ALGO PARA CHEQUEAR VALORES VALIDOS.");
+			}
+		});
+	}
+	
+	public void mostrarValoresEsperados()
 	{
-		Integer columnas[] = juego.get_columnas_sumadas();
-		Integer filas[] = juego.get_filas_sumadas();
-		sumas_columnas = new Label[columnas.length];
-		sumas_filas = new Label[filas.length];
+		int columnas[] = juego.getSumasEsperadasPorColumna();
+		int filas[] = juego.getSumasEsperadasPorFila();
+		sumasEsperadasPorColumna = new Label[columnas.length];
+		sumasEsperadasPorFila = new Label[filas.length];
 		
 		for (int c = 0; c < columnas.length; c ++)
 		{
-			sumas_columnas[c] = new Label(filas[c].toString());
-			sumas_columnas[c].setBounds(filas.length * 50, c * 50, 50, 50);
-			sumas_columnas[c].setAlignment(1);
-			ventana_principal.getContentPane().add(sumas_columnas[c]);
+			sumasEsperadasPorColumna[c] = new Label(Integer.toString(filas[c]));
+			sumasEsperadasPorColumna[c].setBounds(filas.length * 50, c * 50, 50, 50);
+			sumasEsperadasPorColumna[c].setAlignment(1);
+			ventanaPrincipal.getContentPane().add(sumasEsperadasPorColumna[c]);
 		}
 		
 		for (int f = 0; f < filas.length; f ++)
 		{
-			sumas_filas[f] = new Label(columnas[f].toString());
-			sumas_filas[f].setBounds(f * 50, columnas.length * 50, 50, 50);
-			sumas_filas[f].setAlignment(1);
-			ventana_principal.getContentPane().add(sumas_filas[f]);
+			sumasEsperadasPorFila[f] = new Label(Integer.toString(columnas[f]));
+			sumasEsperadasPorFila[f].setBounds(f * 50, columnas.length * 50, 50, 50);
+			sumasEsperadasPorFila[f].setAlignment(1);
+			ventanaPrincipal.getContentPane().add(sumasEsperadasPorFila[f]);
 		}
 	}
 	
-	private int get_tamanio_personalizado() // A futuro debe preguntar al usuario el tamaño
+	private int getTamanioPersonalisado() // A futuro debe preguntar al usuario el tamaño
 	{
 		return 7;
 	}
 	
 	private void limpiarVentana() // Borra pantalla del juego anterior
 	{
-		borrar_casilleros();
-		borrar_consigna();
+		borrarCasilleros();
+		borrarConsigna();
 	}
 	
-	private void borrar_casilleros()
+	private void borrarCasilleros()
 	{
 		for (int x = 0; x < casilleros.length; x++)
 		{
 			for (int y = 0; y < casilleros.length; y++)
 			{
-				ventana_principal.getContentPane().remove(casilleros[x][y]);
+				ventanaPrincipal.getContentPane().remove(casilleros[y][x]);
 			}
 		}	
 	}
 	
-	public void borrar_consigna()
+	public void borrarConsigna()
 	{
-		for (int c = 0; c < sumas_columnas.length; c ++)
+		for (int c = 0; c < sumasEsperadasPorColumna.length; c ++)
 		{
-			ventana_principal.getContentPane().remove(sumas_columnas[c]);
+			ventanaPrincipal.getContentPane().remove(sumasEsperadasPorColumna[c]);
 		}
 		
-		for (int f = 0; f < sumas_filas.length; f ++)
+		for (int f = 0; f < sumasEsperadasPorFila.length; f ++)
 		{
-			ventana_principal.getContentPane().remove(sumas_filas[f]);
+			ventanaPrincipal.getContentPane().remove(sumasEsperadasPorFila[f]);
 		}
 		
 	}
