@@ -9,6 +9,10 @@ public class Nodoku {
 	private int[] sumasEsperadasPorFila;
 	private int[] sumasEsperadasPorColumna;
 	
+	private int[][] grilla;
+	private int[] sumasRealizadasPorFila;
+	private int[] sumasRealizadasPorColumna;
+	
 	private final int VALOR_MAXIMO_DEFECTO = 4;
 	
 	public Nodoku(int tamanio) {
@@ -16,6 +20,10 @@ public class Nodoku {
 		anchoGrilla = tamanio;
 		largoGrilla = tamanio;
 		valorMaximoCelda = VALOR_MAXIMO_DEFECTO;
+		
+		grilla = new int[tamanio][tamanio];
+		sumasRealizadasPorFila = new int[tamanio];
+		sumasRealizadasPorColumna = new int[tamanio];
 		
 		generarJuego();
 	}
@@ -38,6 +46,13 @@ public class Nodoku {
 		}
 	}
 
+	public void cambiarValorGrilla(int valor, int x, int y) {
+		int valorAnterior = grilla[y][x];
+		
+		sumasRealizadasPorFila[y] += valor - valorAnterior;
+		sumasRealizadasPorColumna[x] += valor - valorAnterior;
+	}
+	
 	public int[] getSumasEsperadasPorFila() {
 		return sumasEsperadasPorFila;
 	}

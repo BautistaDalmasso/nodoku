@@ -184,9 +184,7 @@ public class InterfazNodoku {
 		crearCasilleros(tamanio);
 		mostrarValoresEsperados();
 	}
-	
-	// *************************************************
-	
+		
 	private void setearVentana()
 	{
 		// Lee la resolución de la pantalla del dispositivo
@@ -239,17 +237,21 @@ public class InterfazNodoku {
 		}
 	}
 	
+	private void cambiarValorGrilla(int valor, int x, int y) {
+		juego.cambiarValorGrilla(valor, x, y);
+	}
+	
 	private JTextField crearCelda(int x, int y) {
 		JTextField celda = new JTextField();
 		
 		celda.setHorizontalAlignment(JTextField.CENTER);
 		celda.setBounds(x*50, y*50, 47, 47);
-		agregarDocumentListener(celda);
+		agregarDocumentListener(celda, x, y);
 		
 		return celda;
 	}
 	
-	private void agregarDocumentListener(JTextField celda) {
+	private void agregarDocumentListener(JTextField celda, int x, int y) {
 		celda.getDocument().addDocumentListener(new DocumentListener() {
 			@Override
 			public void insertUpdate(DocumentEvent e) {
@@ -262,7 +264,9 @@ public class InterfazNodoku {
 			@Override
 			public void changedUpdate(DocumentEvent e) {
 				// Llamado cada vez que el contenido de una celda cambia.
-				System.out.println("IMPLEMENTAME.");
+				int valor = Integer.parseInt(celda.getText());
+				
+				cambiarValorGrilla(valor, x, y);
 				System.out.println("TAMBIEN IMPLEMENTA ALGO PARA CHEQUEAR VALORES VALIDOS.");
 			}
 		});
