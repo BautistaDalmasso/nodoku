@@ -31,8 +31,6 @@ public class InterfazNodoku {
 	private boolean filasResueltas[];
 	private boolean columnasResueltas[];
 	
-	private enum NivelJuego {Fácil, Medio, Difícil, Personalizado};
-	private NivelJuego nivel;
 	private final Color COLOR_CORRECTO = Color.green;
 	private final Color COLOR_DEFAULT = Color.white;
 	private final int TAMANIO_FACIL = 4;
@@ -94,8 +92,7 @@ public class InterfazNodoku {
 		ventanaPrincipal.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		// Al arrancar por primera vez, lo hace en modo fácil ************	
-		nivel = NivelJuego.Fácil;
-		nuevoJuego(nivel);
+		nuevoJuego(TAMANIO_FACIL, ANCHO_VENTANA_FACIL, ALTO_VENTANA_FACIL);
 		cadenaDigitosValidos = digitosValidos();
 		
 		// Crea barra menú ***********************************************
@@ -103,7 +100,6 @@ public class InterfazNodoku {
 		ventanaPrincipal.setJMenuBar(barraMenu);
 		// Crea  menú desplegable Nuevo **********************************
 		barraMenu.add(crearMenuDesplegable());
-		
 	}
 	
 	private JMenu crearMenuDesplegable() {
@@ -116,8 +112,7 @@ public class InterfazNodoku {
 			public void actionPerformed(ActionEvent e)
 			{	
 				limpiarVentana();
-				nivel = NivelJuego.Fácil;
-				nuevoJuego(nivel);
+				nuevoJuego(TAMANIO_FACIL, ANCHO_VENTANA_FACIL, ALTO_VENTANA_FACIL);
 			}
 		});
 		mnNuevo.add(mnNuevoItemFacil);
@@ -128,8 +123,7 @@ public class InterfazNodoku {
 			public void actionPerformed(ActionEvent e)
 			{
 				limpiarVentana();
-				nivel = NivelJuego.Medio;
-				nuevoJuego(nivel);
+				nuevoJuego(TAMANIO_MEDIO, ANCHO_VENTANA_MEDIO, ALTO_VENTANA_MEDIO);
 			}
 		});
 		mnNuevo.add(mnNuevoItemMedio);
@@ -140,8 +134,7 @@ public class InterfazNodoku {
 			public void actionPerformed(ActionEvent e)
 			{
 				limpiarVentana();
-				nivel = NivelJuego.Difícil;
-				nuevoJuego(nivel);
+				nuevoJuego(TAMANIO_DIFICIL, ANCHO_VENTANA_DIFICIL, ALTO_VENTANA_DIFICIL);
 			}
 		});
 		mnNuevo.add(mnNuevoItemDificil);
@@ -152,8 +145,9 @@ public class InterfazNodoku {
 			public void actionPerformed(ActionEvent e)
 			{
 				limpiarVentana();
-				nivel = NivelJuego.Personalizado;		
-				nuevoJuego(nivel);
+				// TODO: reemplazar.
+				int tamanio = getTamanioPersonalizado();
+				nuevoJuego(tamanio, tamanio*50+60, tamanio*50+110);
 			}
 		});
 		mnNuevo.add(mnNuevoItemPersonalizado);
@@ -171,64 +165,18 @@ public class InterfazNodoku {
 		return mnNuevo;
 	}
 	
-	private void nuevoJuego(NivelJuego nivel)
+	private void nuevoJuego(int tamanio, int ancho, int alto)
 	{	
-		int tamanio;
-		switch (nivel)
-		{
-		case Fácil:
-			tamanio = TAMANIO_FACIL;
-			break;
-			
-		case Medio:
-			tamanio = TAMANIO_MEDIO;
-			break;
-		
-		case Difícil:
-			tamanio = TAMANIO_DIFICIL;
-			break;
-			
-		case Personalizado:
-			tamanioPersonalizado = getTamanioPersonalizado();
-			tamanio = tamanioPersonalizado;
-			break;
-			
-		default: throw new IllegalArgumentException("Nivel de juego inexistente: " + nivel);
-		}
-		
 		juego = new Nodoku(tamanio);
 		filasResueltas = new boolean[tamanio];
 		columnasResueltas = new boolean[tamanio];
-		setearVentana();
+		setearVentana(ancho, alto);
 		crearCasilleros(tamanio);
 		mostrarValoresEsperados();
 	}
 
-	private void setearVentana()
+	private void setearVentana(int ancho, int alto)
 	{
-		int ancho = 0, alto = 0; // coordenadas y tamaño del Frame
-
-		switch (nivel) // la ventana se crea según su tamaño
-		{
-		case Fácil:
-			ancho = ANCHO_VENTANA_FACIL;
-			alto = ALTO_VENTANA_FACIL;
-			break;
-			
-		case Medio:
-			ancho = ANCHO_VENTANA_MEDIO;
-			alto = ALTO_VENTANA_MEDIO;
-			break;
-			
-		case Difícil:
-			ancho = ANCHO_VENTANA_DIFICIL;
-			alto = ALTO_VENTANA_DIFICIL;
-			break;
-			
-		case Personalizado:
-			ancho = tamanioPersonalizado * 50 + 60;
-			alto = tamanioPersonalizado * 50 + 110;
-		}
 		centrar_ventana(ventanaPrincipal, ancho, alto);
 	}
 	
