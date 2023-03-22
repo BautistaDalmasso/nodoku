@@ -1,5 +1,6 @@
 package nodoku;
 
+import java.util.Date;
 import java.util.Random;
 
 public class Nodoku {
@@ -10,6 +11,9 @@ public class Nodoku {
 	private int[] sumasEsperadasPorColumna;
 	private int[][] grilla;
 	
+	private long tiempoDeInicio;
+	private long tiempoDeCompletacion;
+	
 	private final int VALOR_MAXIMO_DEFECTO = 4;
 	
 	public Nodoku(int tamanio) {
@@ -18,6 +22,9 @@ public class Nodoku {
 		largoGrilla = tamanio;
 		valorMaximoCelda = VALOR_MAXIMO_DEFECTO;
 		grilla = new int[tamanio][tamanio];
+		
+		Date tiempo = new Date();
+		tiempoDeInicio = tiempo.getTime();
 		
 		generarJuego();
 	}
@@ -81,7 +88,7 @@ public class Nodoku {
 		return suma == sumasEsperadasPorColumna[x];
 	}
 	
-	public boolean getEstaResuelto()
+	public boolean chequearJuegoResuelto()
 	{
 		boolean juegoResuelto = true;
 		for (int x = 0; x < anchoGrilla - 1; x++)
@@ -93,8 +100,20 @@ public class Nodoku {
 		{
 			juegoResuelto = juegoResuelto && 
 			filaEstaResuelta(y);
-		}	
+		}
+		
+		if (juegoResuelto) {
+			manejarJuegoResuelto();
+		}
+		
 		return juegoResuelto;
+	}
+	
+	private void manejarJuegoResuelto() {
+		Date tiempo = new Date();
+		tiempoDeCompletacion = tiempo.getTime() - tiempoDeInicio;
+		
+		System.out.println(tiempoDeCompletacion);
 	}
 }
 

@@ -230,7 +230,7 @@ public class InterfazNodoku {
 			setColorColumna(x, false);
 		}
 		
-		if (juego.getEstaResuelto())
+		if (juego.chequearJuegoResuelto())
 		{
 			System.out.println("GANASTE!!!!");
 		}
