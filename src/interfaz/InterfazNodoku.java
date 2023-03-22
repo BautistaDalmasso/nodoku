@@ -90,6 +90,13 @@ public class InterfazNodoku {
 		ventanaPrincipal.getContentPane().setLayout(null);
 		ventanaPrincipal.setResizable(false); // cambio de tamaño no permitido
 		ventanaPrincipal.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		// Acción que se ejecutará antes de cerrar la ventana.
+		ventanaPrincipal.addWindowListener(new java.awt.event.WindowAdapter() {
+		    @Override
+		    public void windowClosing(java.awt.event.WindowEvent windowEvent) {
+		        antesDeCerrar();
+		    }
+		});
 		
 		// Al arrancar por primera vez, lo hace en modo fácil ************	
 		nuevoJuego(TAMANIO_FACIL, ANCHO_VENTANA_FACIL, ALTO_VENTANA_FACIL);
@@ -100,6 +107,16 @@ public class InterfazNodoku {
 		ventanaPrincipal.setJMenuBar(barraMenu);
 		// Crea  menú desplegable Nuevo **********************************
 		barraMenu.add(crearMenuDesplegable());
+	}
+	
+	private void nuevoJuego(int tamanio, int ancho, int alto)
+	{	
+		juego = new Nodoku(tamanio);
+		filasResueltas = new boolean[tamanio];
+		columnasResueltas = new boolean[tamanio];
+		setearVentana(ancho, alto);
+		crearCasilleros(tamanio);
+		mostrarValoresEsperados();
 	}
 	
 	private JMenu crearMenuDesplegable() {
@@ -157,7 +174,7 @@ public class InterfazNodoku {
 		{
 			public void actionPerformed(ActionEvent e)
 			{
-				System.exit(0);
+				antesDeCerrar();
 			}	
 		});
 		mnNuevo.add(mnNuevoItemSalir);
@@ -165,14 +182,9 @@ public class InterfazNodoku {
 		return mnNuevo;
 	}
 	
-	private void nuevoJuego(int tamanio, int ancho, int alto)
-	{	
-		juego = new Nodoku(tamanio);
-		filasResueltas = new boolean[tamanio];
-		columnasResueltas = new boolean[tamanio];
-		setearVentana(ancho, alto);
-		crearCasilleros(tamanio);
-		mostrarValoresEsperados();
+	private void antesDeCerrar() {
+		juego.guardarRanking();
+		System.exit(0);
 	}
 
 	private void setearVentana(int ancho, int alto)
@@ -232,6 +244,9 @@ public class InterfazNodoku {
 		
 		if (juego.chequearJuegoResuelto())
 		{
+			// TODO: permitir al usuario ingresar un nombre.
+			String nombre = "BAUTI";
+			juego.agregarAlRanking(nombre);
 			System.out.println("GANASTE!!!!");
 		}
 	}

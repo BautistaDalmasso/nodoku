@@ -13,6 +13,7 @@ public class Nodoku {
 	
 	private long tiempoDeInicio;
 	private long tiempoDeCompletacion;
+	private Ranking ranking;
 	
 	private final int VALOR_MAXIMO_DEFECTO = 4;
 	
@@ -25,6 +26,7 @@ public class Nodoku {
 		
 		Date tiempo = new Date();
 		tiempoDeInicio = tiempo.getTime();
+		ranking = new Ranking();
 		
 		generarJuego();
 	}
@@ -86,6 +88,15 @@ public class Nodoku {
 			suma += valor;
 		}
 		return suma == sumasEsperadasPorColumna[x];
+	}
+	
+	public void agregarAlRanking(String nombre) {
+		ranking.agregarJugador(tiempoDeCompletacion, nombre);
+	}
+	
+	public void guardarRanking() {
+		// Llamado cuando se cierra la aplicación para guardar el ranking.
+		ranking.guardarRanking();
 	}
 	
 	public boolean chequearJuegoResuelto()
