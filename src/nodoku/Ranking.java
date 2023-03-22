@@ -66,12 +66,10 @@ public class Ranking {
 		
 		while (s.hasNextLine()) {
 			String data = s.nextLine();
-			System.out.println(data);
 			Jugador j = new Jugador(data.split(","));
 			agregarJugador(j.tiempoDeCompletación, j.nombre);
 		}
 		s.close();
-		System.out.println(jugadoresPorTiempo);
 	}
 }
 
