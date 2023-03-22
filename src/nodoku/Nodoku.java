@@ -53,13 +53,6 @@ public class Nodoku {
 		sumasRealizadasPorColumna[x] += valor - valorAnterior;
 	}
 	
-	public int[] getSumasEsperadasPorFila() {
-		return sumasEsperadasPorFila;
-	}
-
-	public int[] getSumasEsperadasPorColumna() {
-		return sumasEsperadasPorColumna;
-	}
 	
 	public boolean filaEstaResuelta(int y) {
 		return sumasRealizadasPorFila[y] == sumasEsperadasPorFila[y];
@@ -69,4 +62,25 @@ public class Nodoku {
 		return sumasRealizadasPorColumna[y] == sumasEsperadasPorColumna[y];
 	}
 	
+	public boolean juegoEstaGanado() {
+		boolean ganado = true;
+		for (int i=0; i < sumasEsperadasPorColumna.length; i++) {
+			ganado = ganado && 
+					sumasRealizadasPorColumna[i] == sumasEsperadasPorColumna[i];
+		}
+		for (int i=0; i < sumasEsperadasPorFila.length; i++) {
+			ganado = ganado &&
+					sumasRealizadasPorFila[i] == sumasEsperadasPorFila[i];
+		}
+		return ganado;
+	}
+
+
+	public int[] getSumasEsperadasPorFila() {
+		return sumasEsperadasPorFila;
+	}
+
+	public int[] getSumasEsperadasPorColumna() {
+		return sumasEsperadasPorColumna;
+	}
 }

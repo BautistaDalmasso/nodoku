@@ -246,6 +246,9 @@ public class InterfazNodoku {
 		if (juego.columnaEstaResuelta(x)) {
 			System.out.println("Columna resuelta.");
 		}
+		if (juego.juegoEstaGanado()) {
+			System.out.println("GANASTE");
+		}
 	}
 	
 	private JTextField crearCelda(int x, int y) {
