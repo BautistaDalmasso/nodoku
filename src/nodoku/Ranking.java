@@ -1,7 +1,6 @@
 package nodoku;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashMap;
@@ -12,7 +11,7 @@ import java.util.Scanner;
 
 public class Ranking {
 	File archivoRankings;
-	Map<Long, String> jugadoresEnElRankingPorTiempo;
+	Map<Long, String> jugadoresPorTiempo;
 	List<Long> mejoresTiempos;
 	
 	public Ranking() {
@@ -21,12 +20,9 @@ public class Ranking {
 		boolean archivoCreado;
 		try {
 			archivoCreado = archivoRankings.createNewFile();
-			if (archivoCreado) {
-				// El archivo no existia previamente.
-				jugadoresEnElRankingPorTiempo = new HashMap<Long, String>();
-				mejoresTiempos = new LinkedList<Long>();
-			}
-			else {
+			jugadoresPorTiempo = new HashMap<Long, String>();
+			mejoresTiempos = new LinkedList<Long>();
+			if (!archivoCreado) {
 				// Ya existe un archivo con los rankings.
 				leerRankings();
 			}
@@ -36,7 +32,7 @@ public class Ranking {
 	}
 
 	public void agregarJugador(Long tiempo, String nombre) {
-		jugadoresEnElRankingPorTiempo.put(tiempo, nombre);
+		jugadoresPorTiempo.put(tiempo, nombre);
 		mejoresTiempos.add(tiempo);
 	}
 	
@@ -50,7 +46,7 @@ public class Ranking {
 				// Solo guardamos los mejores 10 tiempos.
 				Long tiempoDeCompletacion = mejoresTiempos.get(i);
 				rankingAGuardar.append(tiempoDeCompletacion.toString() 
-						+ "," + jugadoresEnElRankingPorTiempo.get(tiempoDeCompletacion) 
+						+ "," + jugadoresPorTiempo.get(tiempoDeCompletacion) 
 						+ "\n");
 			}
 			fw.write(rankingAGuardar.toString());
@@ -69,9 +65,13 @@ public class Ranking {
 		Scanner s = new Scanner(archivoRankings);
 		
 		while (s.hasNextLine()) {
-			Jugador j = new Jugador(s.nextLine().split(","));
+			String data = s.nextLine();
+			System.out.println(data);
+			Jugador j = new Jugador(data.split(","));
 			agregarJugador(j.tiempoDeCompletación, j.nombre);
 		}
+		s.close();
+		System.out.println(jugadoresPorTiempo);
 	}
 }
 
