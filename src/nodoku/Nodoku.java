@@ -9,8 +9,6 @@ public class Nodoku {
 	private int[] sumasEsperadasPorFila;
 	private int[] sumasEsperadasPorColumna;
 	private int[][] grilla;
-	private int[] sumasRealizadasPorFila;
-	private int[] sumasRealizadasPorColumna;
 	
 	private final int VALOR_MAXIMO_DEFECTO = 4;
 	
@@ -20,8 +18,6 @@ public class Nodoku {
 		largoGrilla = tamanio;
 		valorMaximoCelda = VALOR_MAXIMO_DEFECTO;
 		grilla = new int[tamanio][tamanio];
-		sumasRealizadasPorFila = new int[tamanio];
-		sumasRealizadasPorColumna = new int[tamanio];
 		
 		generarJuego();
 	}
@@ -45,11 +41,7 @@ public class Nodoku {
 	}
 
 	public void cambiarValorGrilla(int valor, int x, int y) {
-		int valorAnterior = grilla[y][x];
-		grilla[y][x] = valor; // la grilla no se actualizaba!!!
-		
-		sumasRealizadasPorFila[y] += valor - valorAnterior;
-		sumasRealizadasPorColumna[x] += valor - valorAnterior;
+		grilla[y][x] = valor;
 	}
 	
 	public int getValorMaximoCelda()
@@ -66,27 +58,43 @@ public class Nodoku {
 	}
 	
 	public boolean filaEstaResuelta(int y) {
-		return sumasRealizadasPorFila[y] == sumasEsperadasPorFila[y];
+		int suma = 0;
+		for (int x=0; x<grilla[0].length; x++) {
+			int valor = grilla[y][x];
+			if (valor==0) {
+				return false;
+			}
+			suma += valor;
+		}
+		return suma == sumasEsperadasPorFila[y];
 	}
 	
-	public boolean columnaEstaResuelta(int y) {
-		return sumasRealizadasPorColumna[y] == sumasEsperadasPorColumna[y];
+	public boolean columnaEstaResuelta(int x) {
+		int suma = 0;
+		for (int y=0; y<grilla.length; y++) {
+			int valor = grilla[y][x];
+			if (valor==0) {
+				return false;
+			}
+			suma += valor;
+		}
+		return suma == sumasEsperadasPorColumna[x];
 	}
 	
 	public boolean getEstaResuelto()
 	{
-		boolean juego_resuelto = true;
-		for (int i = 0; i < anchoGrilla - 1; i++)
+		boolean juegoResuelto = true;
+		for (int x = 0; x < anchoGrilla - 1; x++)
 		{
-			juego_resuelto = juego_resuelto && 
-			sumasRealizadasPorColumna[i] == sumasEsperadasPorColumna[i];
+			juegoResuelto = juegoResuelto && 
+			columnaEstaResuelta(x);
 		}
-		for (int i = 0; i < largoGrilla - 1; i++)
+		for (int y = 0; y < largoGrilla - 1; y++)
 		{
-			juego_resuelto = juego_resuelto && 
-			sumasRealizadasPorFila[i] == sumasEsperadasPorFila[i];
+			juegoResuelto = juegoResuelto && 
+			filaEstaResuelta(y);
 		}	
-		return juego_resuelto;
+		return juegoResuelto;
 	}
 }
 
