@@ -28,6 +28,9 @@ public class InterfazNodoku {
 	private String cadenaDigitosValidos;
 	private Label sumasEsperadasPorFila[];
 	private Label sumasEsperadasPorColumna[];
+	private boolean filasResueltas[];
+	private boolean columnasResueltas[];
+	
 	private enum NivelJuego {Fácil, Medio, Difícil, Personalizado};
 	private NivelJuego nivel;
 	private final Color COLOR_CORRECTO = Color.green;
@@ -190,6 +193,8 @@ public class InterfazNodoku {
 		}
 		
 		juego = new Nodoku(tamanio);
+		filasResueltas = new boolean[tamanio];
+		columnasResueltas = new boolean[tamanio];
 		setearVentana();
 		crearCasilleros(tamanio);
 		mostrarValoresEsperados();
@@ -258,14 +263,18 @@ public class InterfazNodoku {
 		
 		if (juego.filaEstaResuelta(y)) {
 			System.out.println("Fila resuelta.");
+			filasResueltas[y] = true;
 			setColorFila(y, true);
 		} else {
+			filasResueltas[y] = false;
 			setColorFila(y, false);
 		}
 		if (juego.columnaEstaResuelta(x)) {
 			System.out.println("Columna resuelta.");
+			columnasResueltas[x] = true;
 			setColorColumna(x, true);
 		} else {
+			columnasResueltas[x] = false;
 			setColorColumna(x, false);
 		}
 		
@@ -277,42 +286,36 @@ public class InterfazNodoku {
 	
 	private void setColorFila(int y, boolean sumaCorrecta)
 	{
-		if (sumaCorrecta)
+		for (int x = 0; x < casilleros[y].length; x++)
 		{
-			for (int i = 0; i < casilleros[y].length; i++)
-			{
-				casilleros[y][i].setBackground(COLOR_CORRECTO);
-			}
-		} else {
-			for (int i = 0; i < casilleros[y].length; i++)
-			{
-				if (noEstaVerde(casilleros[y][i]))
+			if (sumaCorrecta) {
+				casilleros[y][x].setBackground(COLOR_CORRECTO);
+			} else {
+				if (!columnasResueltas[x])
 				{
-					casilleros[y][i].setBackground(COLOR_DEFAULT);
+					casilleros[y][x].setBackground(COLOR_DEFAULT);
 				}
 			}
 		}
+		
 	}
 	
 	private void setColorColumna(int x, boolean sumaCorrecta)
 	{
-		 	for (int i = 0; i < casilleros[x].length; i++)
+		 	for (int y = 0; y < casilleros.length; y++)
 			{
 				if (sumaCorrecta)
 				{
-					casilleros[i][x].setBackground(COLOR_CORRECTO);
+					casilleros[y][x].setBackground(COLOR_CORRECTO);
 				} else {
-					if (noEstaVerde(casilleros[i][x]))
+					if (!filasResueltas[y])
 					{
-					casilleros[i][x].setBackground(COLOR_DEFAULT);
+						casilleros[y][x].setBackground(COLOR_DEFAULT);
 					}
 				}
 			}
 	}
 
-	private boolean noEstaVerde(JTextField casillero) {	
-		return casillero.getBackground() != Color.green;
-	}
 
 	private JFormattedTextField crearCelda(int x, int y, MaskFormatter formato) {
 		JFormattedTextField celda = new JFormattedTextField(formato);
