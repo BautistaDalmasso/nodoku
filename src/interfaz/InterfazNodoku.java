@@ -101,13 +101,15 @@ public class InterfazNodoku {
 		// Crea barra menú ***********************************************
 		JMenuBar barraMenu = new JMenuBar();
 		ventanaPrincipal.setJMenuBar(barraMenu);
-		
-		
 		// Crea  menú desplegable Nuevo **********************************
-		JMenu mnNuevo = new JMenu("Nuevo juego");
-		barraMenu.add(mnNuevo);
+		barraMenu.add(crearMenuDesplegable());
 		
-		// Crea opciones dentro de Nuevo *********************************
+	}
+	
+	private JMenu crearMenuDesplegable() {
+		/* Crea un menu deplegable con opciones. */
+		
+		JMenu mnNuevo = new JMenu("Nuevo juego");
 		JMenuItem mnNuevoItemFacil = new JMenuItem("Fácil");
 		mnNuevoItemFacil.addActionListener(new ActionListener()
 		{
@@ -164,7 +166,9 @@ public class InterfazNodoku {
 				System.exit(0);
 			}	
 		});
-		mnNuevo.add(mnNuevoItemSalir);	
+		mnNuevo.add(mnNuevoItemSalir);
+		
+		return mnNuevo;
 	}
 	
 	private void nuevoJuego(NivelJuego nivel)
