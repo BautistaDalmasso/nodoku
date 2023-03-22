@@ -2,14 +2,17 @@ package interfaz;
 
 import nodoku.Nodoku;
 import java.awt.EventQueue;
+import java.awt.Font;
 import java.awt.Label;
 import java.awt.Toolkit;
+import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JMenuBar;
 import javax.swing.JMenu;
 import javax.swing.UIManager;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.text.MaskFormatter;
 import javax.swing.JTextField;
 import java.awt.Dimension;
 import javax.swing.JMenuItem;
@@ -23,7 +26,6 @@ public class InterfazNodoku {
 	private JTextField casilleros[][];
 	private Label sumasEsperadasPorFila[];
 	private Label sumasEsperadasPorColumna[];
-//	private int grilla[][];
 	private enum NivelJuego {Fácil, Medio, Difícil, Personalizado};
 	private NivelJuego nivel;
 	private final int TAMANIO_FACIL = 4;
@@ -78,8 +80,7 @@ public class InterfazNodoku {
 	 */
 	private void initialize()
 	{	
-		// Setea la ventana del juego
-		
+		// Setea la ventana del juego	
 		ventanaPrincipal = new JFrame();
 		ventanaPrincipal.getContentPane().setLayout(null);
 		ventanaPrincipal.setResizable(false); // cambio de tamaño no permitido
@@ -88,14 +89,17 @@ public class InterfazNodoku {
 		// Al arrancar por primera vez, lo hace en modo fácil ************	
 		nivel = NivelJuego.Fácil;
 		nuevoJuego(nivel);
-		// ***************************************************************
-			
+		
+		// Crea barra menú ***********************************************
 		JMenuBar barraMenu = new JMenuBar();
 		ventanaPrincipal.setJMenuBar(barraMenu);
 		
+		
+		// Crea  menú desplegable Nuevo **********************************
 		JMenu mnNuevo = new JMenu("Nuevo juego");
 		barraMenu.add(mnNuevo);
 		
+		// Crea opciones dentro de Nuevo *********************************
 		JMenuItem mnNuevoItemFacil = new JMenuItem("Fácil");
 		mnNuevoItemFacil.addActionListener(new ActionListener()
 		{
@@ -138,7 +142,7 @@ public class InterfazNodoku {
 			public void actionPerformed(ActionEvent e)
 			{
 				limpiarVentana();
-				nivel = NivelJuego.Personalizado;
+				nivel = NivelJuego.Personalizado;		
 				nuevoJuego(nivel);
 			}
 		});
@@ -173,10 +177,11 @@ public class InterfazNodoku {
 			break;
 			
 		case Personalizado:
-			tamanio = getTamanioPersonalisado();
+			tamanioPersonalizado = getTamanioPersonalizado();
+			tamanio = tamanioPersonalizado;
 			break;
 			
-		default: throw new RuntimeException("Error de tamaño de ventana");
+		default: throw new IllegalArgumentException("Nivel de juego inexistente: " + nivel);
 		}
 		
 		juego = new Nodoku(tamanio);
@@ -184,18 +189,13 @@ public class InterfazNodoku {
 		crearCasilleros(tamanio);
 		mostrarValoresEsperados();
 	}
-		
+
+	
 	private void setearVentana()
 	{
-		// Lee la resolución de la pantalla del dispositivo
-		Dimension resolucionPantalla = Toolkit.getDefaultToolkit().getScreenSize();
-		int anchoPantalla = resolucionPantalla.width;
-		int altoPantalla  = resolucionPantalla.height;
-		// ************************************************
-		
-		int x, y, ancho = 0, alto = 0; // coordenadas y tamaño del Frame
+		int ancho = 0, alto = 0; // coordenadas y tamaño del Frame
 
-		switch (nivel) // la ventana se crea según su tamaño y centrada
+		switch (nivel) // la ventana se crea según su tamaño
 		{
 		case Fácil:
 			ancho = ANCHO_VENTANA_FACIL;
@@ -213,28 +213,42 @@ public class InterfazNodoku {
 			break;
 			
 		case Personalizado:
-			tamanioPersonalizado = getTamanioPersonalisado();
 			ancho = tamanioPersonalizado * 50 + 60;
 			alto = tamanioPersonalizado * 50 + 110;
 		}
-		
-		x = (anchoPantalla - ancho)/2;
-		y = (altoPantalla - alto)/2;
-		ventanaPrincipal.setBounds(x, y, ancho, alto);	
+		centrar_ventana(ventanaPrincipal, ancho, alto);
+	}
+	
+	private void centrar_ventana(JFrame ventana, int ancho, int alto)
+	{
+		int ancho_pantalla = getAnchoPantalla();
+		int alto_pantalla  = getAltoPantalla();
+		int x = (ancho_pantalla - ancho)/2;
+		int y = (alto_pantalla - alto)/2;
+		ventana.setBounds(x, y, ancho, alto);
 	}
 	
 	private void crearCasilleros(int tamanio_grilla)
-	{		
-		casilleros = new JTextField[tamanio_grilla][tamanio_grilla];		
-		for (int x = 0; x < tamanio_grilla; x++)
-		{
-			for (int y = 0; y < tamanio_grilla; y++)
+	{	
+		try {
+			MaskFormatter formato;
+			formato = new MaskFormatter("#"); // sólo un dígito
+			String numerosValidos = juego.getCadenaDigitosValidos();
+			formato.setValidCharacters(numerosValidos);	
+			casilleros = new JFormattedTextField[tamanio_grilla][tamanio_grilla];
+			
+			
+			
+			for (int x = 0; x < tamanio_grilla; x++)
 			{
-				casilleros[y][x] = crearCelda(x, y);
-				
-				ventanaPrincipal.getContentPane().add(casilleros[y][x]);
+				for (int y = 0; y < tamanio_grilla; y++)
+				{
+					casilleros[y][x] = crearCelda(x, y, formato);
+					ventanaPrincipal.getContentPane().add(casilleros[y][x]);
+				}
 			}
 		}
+		catch (Exception e){}
 	}
 	
 	private void cambiarValorGrilla(int valor, int x, int y) {
@@ -248,11 +262,12 @@ public class InterfazNodoku {
 		}
 	}
 	
-	private JTextField crearCelda(int x, int y) {
-		JTextField celda = new JTextField();
+	private JFormattedTextField crearCelda(int x, int y, MaskFormatter formato) {
+		JFormattedTextField celda = new JFormattedTextField(formato);
 		
 		celda.setHorizontalAlignment(JTextField.CENTER);
 		celda.setBounds(x*50, y*50, 47, 47);
+		celda.setFont(new Font("Arial", Font.PLAIN, 17));
 		agregarDocumentListener(celda, x, y);
 		
 		return celda;
@@ -271,10 +286,13 @@ public class InterfazNodoku {
 			@Override
 			public void changedUpdate(DocumentEvent e) {
 				// Llamado cada vez que el contenido de una celda cambia.
-				int valor = Integer.parseInt(celda.getText());
+				if (!(celda.getText().equals(" ") || (celda.getText().equals(""))))
+				{
+					int valor = Integer.parseInt(celda.getText());
+					cambiarValorGrilla(valor, x, y);
+				}
 				
-				cambiarValorGrilla(valor, x, y);
-				System.out.println("TAMBIEN IMPLEMENTA ALGO PARA CHEQUEAR VALORES VALIDOS.");
+//				System.out.println("TAMBIEN IMPLEMENTA ALGO PARA CHEQUEAR VALORES VALIDOS.");
 			}
 		});
 	}
@@ -291,6 +309,7 @@ public class InterfazNodoku {
 			sumasEsperadasPorColumna[c] = new Label(Integer.toString(filas[c]));
 			sumasEsperadasPorColumna[c].setBounds(filas.length * 50, c * 50, 50, 50);
 			sumasEsperadasPorColumna[c].setAlignment(1);
+			sumasEsperadasPorColumna[c].setFont(new Font("Arial", Font.PLAIN, 17));
 			ventanaPrincipal.getContentPane().add(sumasEsperadasPorColumna[c]);
 		}
 		
@@ -299,11 +318,12 @@ public class InterfazNodoku {
 			sumasEsperadasPorFila[f] = new Label(Integer.toString(columnas[f]));
 			sumasEsperadasPorFila[f].setBounds(f * 50, columnas.length * 50, 50, 50);
 			sumasEsperadasPorFila[f].setAlignment(1);
+			sumasEsperadasPorFila[f].setFont(new Font("Arial", Font.PLAIN, 17));
 			ventanaPrincipal.getContentPane().add(sumasEsperadasPorFila[f]);
 		}
 	}
 	
-	private int getTamanioPersonalisado() // A futuro debe preguntar al usuario el tamaño
+	private int getTamanioPersonalizado() // A futuro debe preguntar al usuario el tamaño
 	{
 		return 7;
 	}
@@ -338,4 +358,18 @@ public class InterfazNodoku {
 		}
 		
 	}
+	
+	private int getAnchoPantalla()
+	{
+		// Lee el ancho de la resolución de la pantalla del dispositivo
+		Dimension resolucionPantalla = Toolkit.getDefaultToolkit().getScreenSize();
+		return resolucionPantalla.width;
+	}	
+	
+	private int getAltoPantalla()
+	{
+		// Lee el ancho de la resolución de la pantalla del dispositivo
+		Dimension resolucionPantalla = Toolkit.getDefaultToolkit().getScreenSize();
+		return resolucionPantalla.height;
+	}	
 }
