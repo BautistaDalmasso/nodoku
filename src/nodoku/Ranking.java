@@ -10,9 +10,9 @@ import java.util.Map;
 import java.util.Scanner;
 
 public class Ranking {
-	File archivoRankings;
-	Map<Long, String> jugadoresPorTiempo;
-	List<Long> mejoresTiempos;
+	private File archivoRankings;
+	private Map<Long, String> jugadoresPorTiempo;
+	private List<Long> mejoresTiempos;
 	
 	public Ranking() {
 		archivoRankings = new File("rankings.txt");
