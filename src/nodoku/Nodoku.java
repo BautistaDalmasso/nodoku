@@ -8,7 +8,7 @@ public class Nodoku {
 	private int valorMaximoCelda;
 	private int[] sumasEsperadasPorFila;
 	private int[] sumasEsperadasPorColumna;
-	
+	private String cadenaDigitosValidos;
 	private int[][] grilla;
 	private int[] sumasRealizadasPorFila;
 	private int[] sumasRealizadasPorColumna;
@@ -20,7 +20,7 @@ public class Nodoku {
 		anchoGrilla = tamanio;
 		largoGrilla = tamanio;
 		valorMaximoCelda = VALOR_MAXIMO_DEFECTO;
-		
+		cadenaDigitosValidos = digitosValidos();
 		grilla = new int[tamanio][tamanio];
 		sumasRealizadasPorFila = new int[tamanio];
 		sumasRealizadasPorColumna = new int[tamanio];
@@ -38,19 +38,32 @@ public class Nodoku {
 		
 		for(int columna=0; columna<anchoGrilla; columna++) {
 			for(int fila=0; fila<largoGrilla; fila++) {
-				int numeroCelda = rand.nextInt(1, valorMaximoCelda+1);
+				int numeroCelda = rand.nextInt(1, valorMaximoCelda + 1);
 				
 				sumasEsperadasPorColumna[columna] += numeroCelda;
 				sumasEsperadasPorFila[fila] += numeroCelda;
 			}
 		}
 	}
+	
+	private String digitosValidos()
+	{
+		StringBuilder cadena = new StringBuilder();
+		for (int i = 1; i <= valorMaximoCelda; i++)
+		{
+			cadena.append(i);
+		}
+		return cadena.toString();
+	}
 
 	public void cambiarValorGrilla(int valor, int x, int y) {
 		int valorAnterior = grilla[y][x];
+		grilla[y][x] = valor; // la grilla no se actualizaba!!!
 		
 		sumasRealizadasPorFila[y] += valor - valorAnterior;
 		sumasRealizadasPorColumna[x] += valor - valorAnterior;
+//		System.out.println("sumasRealizadasPorFila[" + y + "] = " + sumasRealizadasPorFila[y]);
+//		System.out.println("sumasRealizadasPorColumna[" + x + "] = " + sumasRealizadasPorColumna[x]);
 	}
 	
 	public int[] getSumasEsperadasPorFila() {
@@ -67,6 +80,11 @@ public class Nodoku {
 	
 	public boolean columnaEstaResuelta(int y) {
 		return sumasRealizadasPorColumna[y] == sumasEsperadasPorColumna[y];
+	}
+	
+	public String getCadenaDigitosValidos()
+	{
+		return cadenaDigitosValidos;
 	}
 	
 }
