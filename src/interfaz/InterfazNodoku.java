@@ -78,8 +78,7 @@ public class InterfazNodoku {
 	 */
 	private void initialize()
 	{	
-		// Setea la ventana del juego
-		
+		// Setea la ventana del juego	
 		ventanaPrincipal = new JFrame();
 		ventanaPrincipal.getContentPane().setLayout(null);
 		ventanaPrincipal.setResizable(false); // cambio de tamaño no permitido
@@ -88,14 +87,17 @@ public class InterfazNodoku {
 		// Al arrancar por primera vez, lo hace en modo fácil ************	
 		nivel = NivelJuego.Fácil;
 		nuevoJuego(nivel);
-		// ***************************************************************
-			
+		
+		// Crea barra menú ***********************************************
 		JMenuBar barraMenu = new JMenuBar();
 		ventanaPrincipal.setJMenuBar(barraMenu);
 		
+		
+		// Crea  menú desplegable Nuevo **********************************
 		JMenu mnNuevo = new JMenu("Nuevo juego");
 		barraMenu.add(mnNuevo);
 		
+		// Crea opciones dentro de Nuevo *********************************
 		JMenuItem mnNuevoItemFacil = new JMenuItem("Fácil");
 		mnNuevoItemFacil.addActionListener(new ActionListener()
 		{
@@ -138,7 +140,7 @@ public class InterfazNodoku {
 			public void actionPerformed(ActionEvent e)
 			{
 				limpiarVentana();
-				nivel = NivelJuego.Personalizado;
+				nivel = NivelJuego.Personalizado;		
 				nuevoJuego(nivel);
 			}
 		});
@@ -173,10 +175,11 @@ public class InterfazNodoku {
 			break;
 			
 		case Personalizado:
-			tamanio = getTamanioPersonalisado();
+			tamanioPersonalizado = getTamanioPersonalizado();
+			tamanio = tamanioPersonalizado;
 			break;
 			
-		default: throw new RuntimeException("Error de tamaño de ventana");
+		default: throw new IllegalArgumentException("Nivel de juego inexistente: " + nivel);
 		}
 		
 		juego = new Nodoku(tamanio);
@@ -184,18 +187,13 @@ public class InterfazNodoku {
 		crearCasilleros(tamanio);
 		mostrarValoresEsperados();
 	}
-		
+
+	
 	private void setearVentana()
 	{
-		// Lee la resolución de la pantalla del dispositivo
-		Dimension resolucionPantalla = Toolkit.getDefaultToolkit().getScreenSize();
-		int anchoPantalla = resolucionPantalla.width;
-		int altoPantalla  = resolucionPantalla.height;
-		// ************************************************
-		
-		int x, y, ancho = 0, alto = 0; // coordenadas y tamaño del Frame
+		int ancho = 0, alto = 0; // coordenadas y tamaño del Frame
 
-		switch (nivel) // la ventana se crea según su tamaño y centrada
+		switch (nivel) // la ventana se crea según su tamaño
 		{
 		case Fácil:
 			ancho = ANCHO_VENTANA_FACIL;
@@ -213,14 +211,19 @@ public class InterfazNodoku {
 			break;
 			
 		case Personalizado:
-			tamanioPersonalizado = getTamanioPersonalisado();
 			ancho = tamanioPersonalizado * 50 + 60;
 			alto = tamanioPersonalizado * 50 + 110;
 		}
-		
-		x = (anchoPantalla - ancho)/2;
-		y = (altoPantalla - alto)/2;
-		ventanaPrincipal.setBounds(x, y, ancho, alto);	
+		centrar_ventana(ventanaPrincipal, ancho, alto);
+	}
+	
+	private void centrar_ventana(JFrame ventana, int ancho, int alto)
+	{
+		int ancho_pantalla = getAnchoPantalla();
+		int alto_pantalla  = getAltoPantalla();
+		int x = (ancho_pantalla - ancho)/2;
+		int y = (alto_pantalla - alto)/2;
+		ventana.setBounds(x, y, ancho, alto);
 	}
 	
 	private void crearCasilleros(int tamanio_grilla)
@@ -303,7 +306,7 @@ public class InterfazNodoku {
 		}
 	}
 	
-	private int getTamanioPersonalisado() // A futuro debe preguntar al usuario el tamaño
+	private int getTamanioPersonalizado() // A futuro debe preguntar al usuario el tamaño
 	{
 		return 7;
 	}
@@ -338,4 +341,18 @@ public class InterfazNodoku {
 		}
 		
 	}
+	
+	private int getAnchoPantalla()
+	{
+		// Lee el ancho de la resolución de la pantalla del dispositivo
+		Dimension resolucionPantalla = Toolkit.getDefaultToolkit().getScreenSize();
+		return resolucionPantalla.width;
+	}	
+	
+	private int getAltoPantalla()
+	{
+		// Lee el ancho de la resolución de la pantalla del dispositivo
+		Dimension resolucionPantalla = Toolkit.getDefaultToolkit().getScreenSize();
+		return resolucionPantalla.height;
+	}	
 }
