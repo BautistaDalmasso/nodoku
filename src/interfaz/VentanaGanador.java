@@ -4,23 +4,17 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableColumn;
-
-import nodoku.Nodoku;
-
 import javax.swing.JLabel;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
-import javax.swing.JSlider;
 import javax.swing.JTable;
 import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
 import javax.swing.JButton;
 
 public class VentanaGanador extends JFrame {
-
+	private static final long serialVersionUID = 4351125225212137569L;
 	private JPanel contentPane;
 	private JLabel tiempoLabel;
 	private JTable tablaRanking;

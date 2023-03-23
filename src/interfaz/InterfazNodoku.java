@@ -125,6 +125,10 @@ public class InterfazNodoku {
 		ultimoAncho = ancho;
 		ultimoAlto = alto;
 		
+		if (juego != null) {
+			juego.guardarRanking();
+		}
+		
 		juego = new Nodoku(tamanio);
 		filasResueltas = new boolean[tamanio];
 		columnasResueltas = new boolean[tamanio];
@@ -274,9 +278,6 @@ public class InterfazNodoku {
 	}
 	
 	private void manejarVictoria() {
-		// TODO: permitir al usuario ingresar un nombre.
-		String nombre = "BAUTI";
-		juego.agregarAlRanking(nombre);
 		ventanaGanador.setTiempo(juego.getTiempoDeCompletacion());
 		ventanaGanador.setVisible(true);
 		ventanaPrincipal.setEnabled(false);

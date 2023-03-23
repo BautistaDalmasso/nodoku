@@ -14,15 +14,17 @@ import javax.swing.JTextField;
 public class RegistroRanking extends JDialog {
 
 	private final JPanel contentPanel = new JPanel();
-	private JTextField textField;
+	private JTextField nombreField;
 	private InterfazNodoku interfaz;
-
+	
 	/**
 	 * Create the dialog.
 	 */
 	public RegistroRanking(InterfazNodoku interfaz) {
 		this.interfaz = interfaz;
 		setResizable(false);
+		this.setAlwaysOnTop(true);
+				
 		setBounds(100, 100, 321, 120);
 		getContentPane().setLayout(null);
 		contentPanel.setBounds(0, 0, 305, 81);
@@ -32,31 +34,50 @@ public class RegistroRanking extends JDialog {
 		this.setVisible(false);
 		
 		contentPanel.setLayout(null);
-		{
-			JButton btnListo = new JButton("Listo");
-			btnListo.setBounds(50, 45, 89, 23);
-			contentPanel.add(btnListo);
-		}
 		
 		JLabel lblIngreseSuNombre = new JLabel("Ingrese su nombre:");
 		lblIngreseSuNombre.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		lblIngreseSuNombre.setBounds(10, 11, 141, 23);
 		contentPanel.add(lblIngreseSuNombre);
 		
-		textField = new JTextField();
-		textField.setBounds(148, 11, 141, 20);
-		contentPanel.add(textField);
-		textField.setColumns(10);
+		nombreField = new JTextField();
+		nombreField.setBounds(148, 11, 141, 20);
+		contentPanel.add(nombreField);
+		nombreField.setColumns(10);
+		
+		JButton btnListo = new JButton("Listo");
+		btnListo.setBounds(50, 45, 89, 23);
+		btnListo.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				manejarRegistro();
+			}
+		});
+		contentPanel.add(btnListo);
 		
 		JButton btnCancelar = new JButton("Cancelar");
 		btnCancelar.setBounds(158, 45, 89, 23);
 		btnCancelar.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				interfaz.ventanaGanador.setEnabled(true);
-				interfaz.registroRanking.setVisible(false);
+				ocultarVentana();
 			}
 		});
 		contentPanel.add(btnCancelar);
+	}
+
+	protected void manejarRegistro() {
+		String nombre = nombreField.getText();
+		
+		if (!nombre.equals("")) {
+			interfaz.juego.agregarAlRanking(nombre);
+			
+			ocultarVentana();
+		}
+	}
+	
+	protected void ocultarVentana() {
+		interfaz.ventanaGanador.setEnabled(true);
+		interfaz.registroRanking.setVisible(false);
 	}
 }
