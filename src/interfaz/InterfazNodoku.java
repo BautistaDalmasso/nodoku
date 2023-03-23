@@ -31,7 +31,8 @@ public class InterfazNodoku {
 	private boolean filasResueltas[];
 	private boolean columnasResueltas[];
 	
-	private VentanaGanador ventanaGanador;
+	protected VentanaGanador ventanaGanador;
+	protected RegistroRanking registroRanking;
 	
 	int ultimoTamanio;
 	int ultimoAncho;
@@ -134,7 +135,11 @@ public class InterfazNodoku {
 		if (ventanaGanador != null) {
 			ventanaGanador.dispose();
 		}
+		if (registroRanking != null) {
+			registroRanking.dispose();
+		}
 		
+		registroRanking = new RegistroRanking(this);
 		ventanaGanador = new VentanaGanador(this);
 	}
 	

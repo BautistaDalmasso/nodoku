@@ -90,6 +90,17 @@ public class VentanaGanador extends JFrame {
 		});
 		contentPane.add(btnTerminarJuego);
 		
+		JButton btnRegistrarseAlRanking = new JButton("Registrarse al Ranking");
+		btnRegistrarseAlRanking.setBounds(263, 69, 147, 23);
+		btnRegistrarseAlRanking.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				interfaz.ventanaGanador.setEnabled(false);
+				interfaz.registroRanking.setVisible(true);
+			}
+		});
+		contentPane.add(btnRegistrarseAlRanking);
+		
 		this.setVisible(false);
 		this.setAlwaysOnTop(true);
 	}
