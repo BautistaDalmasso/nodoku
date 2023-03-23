@@ -20,12 +20,14 @@ public class VentanaGanador extends JFrame {
 	private JTable tablaRanking;
 	private DefaultTableModel modeloRanking;
 	private InterfazNodoku interfaz;
+	private boolean registrado;
 
 	/**
 	 * Create the frame.
 	 */
 	public VentanaGanador(InterfazNodoku interfaz) {		
 		this.interfaz = interfaz;
+		registrado = false;
 		
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
@@ -89,8 +91,10 @@ public class VentanaGanador extends JFrame {
 		btnRegistrarseAlRanking.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				interfaz.ventanaGanador.setEnabled(false);
-				interfaz.registroRanking.setVisible(true);
+				if (!registrado) {					
+					interfaz.ventanaGanador.setEnabled(false);
+					interfaz.registroRanking.setVisible(true);
+				}
 			}
 		});
 		contentPane.add(btnRegistrarseAlRanking);
@@ -108,6 +112,10 @@ public class VentanaGanador extends JFrame {
 											horas, minutos, segundos));
 	}
 
+	public void registroExitoso() {
+		registrado = true;
+	}
+	
 	private void inicializarTablaRanking() {
 		tablaRanking = new JTable();
 		tablaRanking.setBounds(10, 105, 400, 120);

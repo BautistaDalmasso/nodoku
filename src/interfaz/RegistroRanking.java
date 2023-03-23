@@ -72,6 +72,7 @@ public class RegistroRanking extends JDialog {
 		if (!nombre.equals("")) {
 			interfaz.juego.agregarAlRanking(nombre);
 			
+			interfaz.ventanaGanador.registroExitoso();
 			ocultarVentana();
 		}
 	}
