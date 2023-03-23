@@ -22,14 +22,21 @@ import java.awt.event.ActionEvent;
 
 
 public class InterfazNodoku {
-	private Nodoku juego;
-	private JFrame ventanaPrincipal;
+	protected Nodoku juego;
+	protected JFrame ventanaPrincipal;
 	private JTextField casilleros[][];
 	private String cadenaDigitosValidos;
 	private Label sumasEsperadasPorFila[];
 	private Label sumasEsperadasPorColumna[];
 	private boolean filasResueltas[];
 	private boolean columnasResueltas[];
+	
+	protected VentanaGanador ventanaGanador;
+	protected RegistroRanking registroRanking;
+	
+	int ultimoTamanio;
+	int ultimoAncho;
+	int ultimoAlto;
 	
 	private final Color COLOR_CORRECTO = Color.green;
 	private final Color COLOR_DEFAULT = Color.white;
@@ -94,9 +101,10 @@ public class InterfazNodoku {
 		ventanaPrincipal.addWindowListener(new java.awt.event.WindowAdapter() {
 		    @Override
 		    public void windowClosing(java.awt.event.WindowEvent windowEvent) {
-		        antesDeCerrar();
+		        salir();
 		    }
 		});
+		
 		
 		// Al arrancar por primera vez, lo hace en modo fácil ************	
 		nuevoJuego(TAMANIO_FACIL, ANCHO_VENTANA_FACIL, ALTO_VENTANA_FACIL);
@@ -109,14 +117,39 @@ public class InterfazNodoku {
 		barraMenu.add(crearMenuDesplegable());
 	}
 	
-	private void nuevoJuego(int tamanio, int ancho, int alto)
+	protected void nuevoJuego(int tamanio, int ancho, int alto)
 	{	
+		limpiarVentana();
+		
+		ultimoTamanio = tamanio;
+		ultimoAncho = ancho;
+		ultimoAlto = alto;
+		
+		if (juego != null) {
+			juego.guardarRanking();
+		}
+		
 		juego = new Nodoku(tamanio);
 		filasResueltas = new boolean[tamanio];
 		columnasResueltas = new boolean[tamanio];
 		setearVentana(ancho, alto);
 		crearCasilleros(tamanio);
 		mostrarValoresEsperados();
+		
+		if (ventanaGanador != null) {
+			ventanaGanador.dispose();
+		}
+		if (registroRanking != null) {
+			registroRanking.dispose();
+		}
+		
+		registroRanking = new RegistroRanking(this);
+		ventanaGanador = new VentanaGanador(this);
+	}
+	
+	protected void nuevoJuego() 
+	{
+		nuevoJuego(ultimoTamanio, ultimoAncho, ultimoAlto);
 	}
 	
 	private JMenu crearMenuDesplegable() {
@@ -128,7 +161,6 @@ public class InterfazNodoku {
 		{
 			public void actionPerformed(ActionEvent e)
 			{	
-				limpiarVentana();
 				nuevoJuego(TAMANIO_FACIL, ANCHO_VENTANA_FACIL, ALTO_VENTANA_FACIL);
 			}
 		});
@@ -139,7 +171,6 @@ public class InterfazNodoku {
 		{
 			public void actionPerformed(ActionEvent e)
 			{
-				limpiarVentana();
 				nuevoJuego(TAMANIO_MEDIO, ANCHO_VENTANA_MEDIO, ALTO_VENTANA_MEDIO);
 			}
 		});
@@ -150,7 +181,6 @@ public class InterfazNodoku {
 		{
 			public void actionPerformed(ActionEvent e)
 			{
-				limpiarVentana();
 				nuevoJuego(TAMANIO_DIFICIL, ANCHO_VENTANA_DIFICIL, ALTO_VENTANA_DIFICIL);
 			}
 		});
@@ -161,7 +191,6 @@ public class InterfazNodoku {
 		{
 			public void actionPerformed(ActionEvent e)
 			{
-				limpiarVentana();
 				// TODO: reemplazar.
 				int tamanio = getTamanioPersonalizado();
 				nuevoJuego(tamanio, tamanio*50+60, tamanio*50+110);
@@ -174,7 +203,7 @@ public class InterfazNodoku {
 		{
 			public void actionPerformed(ActionEvent e)
 			{
-				antesDeCerrar();
+				salir();
 			}	
 		});
 		mnNuevo.add(mnNuevoItemSalir);
@@ -182,7 +211,7 @@ public class InterfazNodoku {
 		return mnNuevo;
 	}
 	
-	private void antesDeCerrar() {
+	protected void salir() {
 		juego.guardarRanking();
 		System.exit(0);
 	}
@@ -244,11 +273,14 @@ public class InterfazNodoku {
 		
 		if (juego.chequearJuegoResuelto())
 		{
-			// TODO: permitir al usuario ingresar un nombre.
-			String nombre = "BAUTI";
-			juego.agregarAlRanking(nombre);
-			System.out.println("GANASTE!!!!");
+			manejarVictoria();
 		}
+	}
+	
+	private void manejarVictoria() {
+		ventanaGanador.setTiempo(juego.getTiempoDeCompletacion());
+		ventanaGanador.setVisible(true);
+		ventanaPrincipal.setEnabled(false);
 	}
 	
 	private void setColorFila(int y, boolean sumaCorrecta)
@@ -362,8 +394,10 @@ public class InterfazNodoku {
 	
 	private void limpiarVentana() // Borra pantalla del juego anterior
 	{
-		borrarCasilleros();
-		borrarConsigna();
+		if (casilleros != null) {			
+			borrarCasilleros();
+			borrarConsigna();
+		}
 	}
 	
 	private void borrarCasilleros()

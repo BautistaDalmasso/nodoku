@@ -53,9 +53,20 @@ public class Ranking {
 			fw.close();
 		} catch (IOException e) {
 			e.printStackTrace();
+		}		
+	}
+	
+	public List<String[]> getTop10Ranking() {
+		LinkedList<String[]> paresJugadorTiempo = new LinkedList<String[]>();
+		
+		for (int i=0; i<10 && i<mejoresTiempos.size(); i++) {
+			Long tiempoDeCompletacion = mejoresTiempos.get(i);
+			String[] par = {jugadoresPorTiempo.get(tiempoDeCompletacion),
+								tiempoDeCompletacion.toString()};
+			paresJugadorTiempo.add(par);
 		}
 		
-		
+		return paresJugadorTiempo;
 	}
 
 	private void leerRankings() throws IOException {
