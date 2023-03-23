@@ -257,6 +257,7 @@ public class InterfazNodoku {
 		// TODO: permitir al usuario ingresar un nombre.
 		String nombre = "BAUTI";
 		juego.agregarAlRanking(nombre);
+		ventanaGanador.setTiempo(juego.getTiempoDeCompletacion());
 		ventanaGanador.setVisible(true);
 		System.out.println("GANASTE!!!!");
 	}

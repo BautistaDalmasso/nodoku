@@ -126,5 +126,9 @@ public class Nodoku {
 		
 		System.out.println(tiempoDeCompletacion);
 	}
+	
+	public Long getTiempoDeCompletacion() {
+		return tiempoDeCompletacion;
+	}
 }
 

@@ -41,11 +41,12 @@ public class VentanaGanador extends JFrame {
 		this.setAlwaysOnTop(true);
 	}
 
-	private void mostrarTiempo(int ms) {
-		int segundos = ms / 1000;
-		int minutos = segundos / 60; segundos = segundos % 60;
-		int horas = minutos / 60; minutos = minutos % 60;
+	public void setTiempo(Long ms) {
+		Long segundos = ms / 1000;
+		Long minutos = segundos / 60; segundos = segundos % 60;
+		Long horas = minutos / 60; minutos = minutos % 60;
 		
-		tiempoLabel.setText("" + horas + ":" + minutos + ":" + segundos);
+		tiempoLabel.setText(String.format("%02d:%02d:%02d", 
+											horas, minutos, segundos));
 	}
 }
