@@ -47,12 +47,12 @@ public class VentanaGanador extends JFrame {
 		
 		JLabel tuTiempoLabel = new JLabel("Tu tiempo:");
 		tuTiempoLabel.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		tuTiempoLabel.setBounds(10, 63, 79, 31);
+		tuTiempoLabel.setBounds(10, 69, 79, 20);
 		contentPane.add(tuTiempoLabel);
 		
 		tiempoLabel = new JLabel("00:00:00");
 		tiempoLabel.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		tiempoLabel.setBounds(85, 69, 58, 19);
+		tiempoLabel.setBounds(85, 69, 58, 20);
 		contentPane.add(tiempoLabel);
 		
 		JScrollPane scrollRanking = new JScrollPane();
