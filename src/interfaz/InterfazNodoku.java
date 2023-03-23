@@ -22,8 +22,8 @@ import java.awt.event.ActionEvent;
 
 
 public class InterfazNodoku {
-	private Nodoku juego;
-	private JFrame ventanaPrincipal;
+	protected Nodoku juego;
+	protected JFrame ventanaPrincipal;
 	private JTextField casilleros[][];
 	private String cadenaDigitosValidos;
 	private Label sumasEsperadasPorFila[];
@@ -32,6 +32,10 @@ public class InterfazNodoku {
 	private boolean columnasResueltas[];
 	
 	private VentanaGanador ventanaGanador;
+	
+	int ultimoTamanio;
+	int ultimoAncho;
+	int ultimoAlto;
 	
 	private final Color COLOR_CORRECTO = Color.green;
 	private final Color COLOR_DEFAULT = Color.white;
@@ -96,7 +100,7 @@ public class InterfazNodoku {
 		ventanaPrincipal.addWindowListener(new java.awt.event.WindowAdapter() {
 		    @Override
 		    public void windowClosing(java.awt.event.WindowEvent windowEvent) {
-		        antesDeCerrar();
+		        salir();
 		    }
 		});
 		
@@ -112,8 +116,14 @@ public class InterfazNodoku {
 		barraMenu.add(crearMenuDesplegable());
 	}
 	
-	private void nuevoJuego(int tamanio, int ancho, int alto)
+	protected void nuevoJuego(int tamanio, int ancho, int alto)
 	{	
+		limpiarVentana();
+		
+		ultimoTamanio = tamanio;
+		ultimoAncho = ancho;
+		ultimoAlto = alto;
+		
 		juego = new Nodoku(tamanio);
 		filasResueltas = new boolean[tamanio];
 		columnasResueltas = new boolean[tamanio];
@@ -125,7 +135,12 @@ public class InterfazNodoku {
 			ventanaGanador.dispose();
 		}
 		
-		ventanaGanador = new VentanaGanador(juego);
+		ventanaGanador = new VentanaGanador(this);
+	}
+	
+	protected void nuevoJuego() 
+	{
+		nuevoJuego(ultimoTamanio, ultimoAncho, ultimoAlto);
 	}
 	
 	private JMenu crearMenuDesplegable() {
@@ -137,7 +152,6 @@ public class InterfazNodoku {
 		{
 			public void actionPerformed(ActionEvent e)
 			{	
-				limpiarVentana();
 				nuevoJuego(TAMANIO_FACIL, ANCHO_VENTANA_FACIL, ALTO_VENTANA_FACIL);
 			}
 		});
@@ -148,7 +162,6 @@ public class InterfazNodoku {
 		{
 			public void actionPerformed(ActionEvent e)
 			{
-				limpiarVentana();
 				nuevoJuego(TAMANIO_MEDIO, ANCHO_VENTANA_MEDIO, ALTO_VENTANA_MEDIO);
 			}
 		});
@@ -159,7 +172,6 @@ public class InterfazNodoku {
 		{
 			public void actionPerformed(ActionEvent e)
 			{
-				limpiarVentana();
 				nuevoJuego(TAMANIO_DIFICIL, ANCHO_VENTANA_DIFICIL, ALTO_VENTANA_DIFICIL);
 			}
 		});
@@ -170,7 +182,6 @@ public class InterfazNodoku {
 		{
 			public void actionPerformed(ActionEvent e)
 			{
-				limpiarVentana();
 				// TODO: reemplazar.
 				int tamanio = getTamanioPersonalizado();
 				nuevoJuego(tamanio, tamanio*50+60, tamanio*50+110);
@@ -183,7 +194,7 @@ public class InterfazNodoku {
 		{
 			public void actionPerformed(ActionEvent e)
 			{
-				antesDeCerrar();
+				salir();
 			}	
 		});
 		mnNuevo.add(mnNuevoItemSalir);
@@ -191,7 +202,7 @@ public class InterfazNodoku {
 		return mnNuevo;
 	}
 	
-	private void antesDeCerrar() {
+	protected void salir() {
 		juego.guardarRanking();
 		System.exit(0);
 	}
@@ -263,7 +274,7 @@ public class InterfazNodoku {
 		juego.agregarAlRanking(nombre);
 		ventanaGanador.setTiempo(juego.getTiempoDeCompletacion());
 		ventanaGanador.setVisible(true);
-		System.out.println("GANASTE!!!!");
+		ventanaPrincipal.setEnabled(false);
 	}
 	
 	private void setColorFila(int y, boolean sumaCorrecta)
@@ -377,8 +388,10 @@ public class InterfazNodoku {
 	
 	private void limpiarVentana() // Borra pantalla del juego anterior
 	{
-		borrarCasilleros();
-		borrarConsigna();
+		if (casilleros != null) {			
+			borrarCasilleros();
+			borrarConsigna();
+		}
 	}
 	
 	private void borrarCasilleros()

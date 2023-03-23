@@ -10,10 +10,14 @@ import nodoku.Nodoku;
 
 import javax.swing.JLabel;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 import javax.swing.JSlider;
 import javax.swing.JTable;
 import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
+import javax.swing.JButton;
 
 public class VentanaGanador extends JFrame {
 
@@ -21,13 +25,13 @@ public class VentanaGanador extends JFrame {
 	private JLabel tiempoLabel;
 	private JTable tablaRanking;
 	private DefaultTableModel modeloRanking;
-	private Nodoku juego;
+	private InterfazNodoku interfaz;
 
 	/**
 	 * Create the frame.
 	 */
-	public VentanaGanador(Nodoku juego) {		
-		this.juego = juego;
+	public VentanaGanador(InterfazNodoku interfaz) {		
+		this.interfaz = interfaz;
 		
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
@@ -65,6 +69,27 @@ public class VentanaGanador extends JFrame {
 		rankingLabel.setBounds(163, 81, 74, 19);
 		contentPane.add(rankingLabel);
 		
+		JButton btnNuevoJuego = new JButton("Nuevo Juego");
+		btnNuevoJuego.setBounds(85, 227, 114, 23);
+		btnNuevoJuego.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				interfaz.ventanaPrincipal.setEnabled(true);
+				interfaz.nuevoJuego();
+			}
+		});
+		contentPane.add(btnNuevoJuego);
+		
+		JButton btnTerminarJuego = new JButton("Terminar Juego");
+		btnTerminarJuego.setBounds(209, 227, 114, 23);
+		btnTerminarJuego.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				interfaz.salir();
+			}
+		});
+		contentPane.add(btnTerminarJuego);
+		
 		this.setVisible(false);
 		this.setAlwaysOnTop(true);
 	}
@@ -86,7 +111,7 @@ public class VentanaGanador extends JFrame {
 		modeloRanking.addColumn("Jugador");
 		modeloRanking.addColumn("Tiempo");
 		
-		for (String[] parJugadorTiempo : juego.getTop10Ranking()) {
+		for (String[] parJugadorTiempo : interfaz.juego.getTop10Ranking()) {
 			modeloRanking.addRow(parJugadorTiempo);
 		}
 		
