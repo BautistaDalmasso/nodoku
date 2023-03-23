@@ -1,6 +1,7 @@
 package nodoku;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Random;
 
 public class Nodoku {
@@ -125,6 +126,10 @@ public class Nodoku {
 		tiempoDeCompletacion = tiempo.getTime() - tiempoDeInicio;
 		
 		System.out.println(tiempoDeCompletacion);
+	}
+	
+	public List<String[]> getTop10Ranking(){
+		return ranking.getTop10Ranking();
 	}
 	
 	public Long getTiempoDeCompletacion() {

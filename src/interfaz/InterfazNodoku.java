@@ -100,8 +100,6 @@ public class InterfazNodoku {
 		    }
 		});
 		
-		// Crea ventana para mostrar al ganador **************************
-		ventanaGanador = new VentanaGanador();
 		
 		// Al arrancar por primera vez, lo hace en modo fácil ************	
 		nuevoJuego(TAMANIO_FACIL, ANCHO_VENTANA_FACIL, ALTO_VENTANA_FACIL);
@@ -122,6 +120,12 @@ public class InterfazNodoku {
 		setearVentana(ancho, alto);
 		crearCasilleros(tamanio);
 		mostrarValoresEsperados();
+		
+		if (ventanaGanador != null) {
+			ventanaGanador.dispose();
+		}
+		
+		ventanaGanador = new VentanaGanador(juego);
 	}
 	
 	private JMenu crearMenuDesplegable() {
