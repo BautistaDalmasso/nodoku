@@ -31,6 +31,8 @@ public class InterfazNodoku {
 	private boolean filasResueltas[];
 	private boolean columnasResueltas[];
 	
+	private VentanaGanador ventanaGanador;
+	
 	private final Color COLOR_CORRECTO = Color.green;
 	private final Color COLOR_DEFAULT = Color.white;
 	private final int TAMANIO_FACIL = 4;
@@ -97,6 +99,9 @@ public class InterfazNodoku {
 		        antesDeCerrar();
 		    }
 		});
+		
+		// Crea ventana para mostrar al ganador **************************
+		ventanaGanador = new VentanaGanador();
 		
 		// Al arrancar por primera vez, lo hace en modo fácil ************	
 		nuevoJuego(TAMANIO_FACIL, ANCHO_VENTANA_FACIL, ALTO_VENTANA_FACIL);
@@ -244,11 +249,16 @@ public class InterfazNodoku {
 		
 		if (juego.chequearJuegoResuelto())
 		{
-			// TODO: permitir al usuario ingresar un nombre.
-			String nombre = "BAUTI";
-			juego.agregarAlRanking(nombre);
-			System.out.println("GANASTE!!!!");
+			manejarVictoria();
 		}
+	}
+	
+	private void manejarVictoria() {
+		// TODO: permitir al usuario ingresar un nombre.
+		String nombre = "BAUTI";
+		juego.agregarAlRanking(nombre);
+		ventanaGanador.setVisible(true);
+		System.out.println("GANASTE!!!!");
 	}
 	
 	private void setColorFila(int y, boolean sumaCorrecta)
