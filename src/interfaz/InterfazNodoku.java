@@ -256,7 +256,6 @@ public class InterfazNodoku {
 	
 	private void cambiarValorGrilla(int valor, int x, int y) {
 		juego.cambiarValorGrilla(valor, x, y);
-		
 		if (juego.filaEstaResuelta(y)) {
 //			System.out.println("Fila resuelta.");
 			filasResueltas[y] = true;
@@ -292,10 +291,12 @@ public class InterfazNodoku {
 		{
 			if (sumaCorrecta) {
 				casilleros[y][x].setBackground(COLOR_CORRECTO);
+				sumasEsperadasPorColumna[y].setBackground(Color.green);
 			} else {
 				if (!columnasResueltas[x])
 				{
 					casilleros[y][x].setBackground(COLOR_DEFAULT);
+					sumasEsperadasPorColumna[y].setBackground(COLOR_DEFAULT);
 				}
 			}
 		}
@@ -309,10 +310,12 @@ public class InterfazNodoku {
 			if (sumaCorrecta)
 			{
 				casilleros[y][x].setBackground(COLOR_CORRECTO);
+				sumasEsperadasPorFila[x].setBackground(Color.GREEN);
 			} else {
 				if (!filasResueltas[y])
 				{
 					casilleros[y][x].setBackground(COLOR_DEFAULT);
+					sumasEsperadasPorFila[x].setBackground(COLOR_DEFAULT);
 				}
 			}
 		}
