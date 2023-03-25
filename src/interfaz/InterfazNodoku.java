@@ -5,8 +5,10 @@ import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.Label;
 import java.awt.Toolkit;
+import javax.swing.JButton;
 import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JMenuBar;
 import javax.swing.JMenu;
 import javax.swing.UIManager;
@@ -17,7 +19,10 @@ import javax.swing.JTextField;
 import java.awt.Color;
 import java.awt.Dimension;
 import javax.swing.JMenuItem;
+import javax.swing.JSlider;
 import java.awt.event.ActionListener;
+import java.util.Dictionary;
+import java.util.Hashtable;
 import java.awt.event.ActionEvent;
 
 
@@ -92,10 +97,8 @@ public class InterfazNodoku {
 	 */
 	private void initialize()
 	{	
-		// Setea la ventana del juego	
-		ventanaPrincipal = new JFrame();
-		ventanaPrincipal.getContentPane().setLayout(null);
-		ventanaPrincipal.setResizable(false); // cambio de tamaño no permitido
+		// Crea la ventana del juego	
+		ventanaPrincipal = ventanaNueva();
 		ventanaPrincipal.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		// Acción que se ejecutará antes de cerrar la ventana.
 		ventanaPrincipal.addWindowListener(new java.awt.event.WindowAdapter() {
@@ -113,6 +116,7 @@ public class InterfazNodoku {
 		// Crea barra menú ***********************************************
 		JMenuBar barraMenu = new JMenuBar();
 		ventanaPrincipal.setJMenuBar(barraMenu);
+		
 		// Crea  menú desplegable Nuevo **********************************
 		barraMenu.add(crearMenuDesplegable());
 	}
@@ -191,9 +195,8 @@ public class InterfazNodoku {
 		{
 			public void actionPerformed(ActionEvent e)
 			{
-				// TODO: reemplazar.
-				int tamanio = getTamanioPersonalizado();
-				nuevoJuego(tamanio, tamanio*50+60, tamanio*50+110);
+				ventanaPrincipal.setVisible(false);
+				pedirTamanioPersonalizado();
 			}
 		});
 		mnNuevo.add(mnNuevoItemPersonalizado);
@@ -218,10 +221,10 @@ public class InterfazNodoku {
 
 	private void setearVentana(int ancho, int alto)
 	{
-		centrar_ventana(ventanaPrincipal, ancho, alto);
+		centrarVentana(ventanaPrincipal, ancho, alto);
 	}
 	
-	private void centrar_ventana(JFrame ventana, int ancho, int alto)
+	private void centrarVentana(JFrame ventana, int ancho, int alto)
 	{
 		int ancho_pantalla = getAnchoPantalla();
 		int alto_pantalla  = getAltoPantalla();
@@ -255,7 +258,7 @@ public class InterfazNodoku {
 		juego.cambiarValorGrilla(valor, x, y);
 		
 		if (juego.filaEstaResuelta(y)) {
-			System.out.println("Fila resuelta.");
+//			System.out.println("Fila resuelta.");
 			filasResueltas[y] = true;
 			setColorFila(y, true);
 		} else {
@@ -263,7 +266,7 @@ public class InterfazNodoku {
 			setColorFila(y, false);
 		}
 		if (juego.columnaEstaResuelta(x)) {
-			System.out.println("Columna resuelta.");
+//			System.out.println("Columna resuelta.");
 			columnasResueltas[x] = true;
 			setColorColumna(x, true);
 		} else {
@@ -301,24 +304,23 @@ public class InterfazNodoku {
 	
 	private void setColorColumna(int x, boolean sumaCorrecta)
 	{
-		 	for (int y = 0; y < casilleros.length; y++)
+	 	for (int y = 0; y < casilleros.length; y++)
+		{
+			if (sumaCorrecta)
 			{
-				if (sumaCorrecta)
+				casilleros[y][x].setBackground(COLOR_CORRECTO);
+			} else {
+				if (!filasResueltas[y])
 				{
-					casilleros[y][x].setBackground(COLOR_CORRECTO);
-				} else {
-					if (!filasResueltas[y])
-					{
-						casilleros[y][x].setBackground(COLOR_DEFAULT);
-					}
+					casilleros[y][x].setBackground(COLOR_DEFAULT);
 				}
 			}
+		}
 	}
 
 
 	private JFormattedTextField crearCelda(int x, int y, MaskFormatter formato) {
 		JFormattedTextField celda = new JFormattedTextField(formato);
-		
 		celda.setHorizontalAlignment(JTextField.CENTER);
 		celda.setBounds(x*50, y*50, 47, 47);
 		celda.setFont(new Font("Arial", Font.PLAIN, 17));
@@ -377,10 +379,64 @@ public class InterfazNodoku {
 		}
 	}
 	
-	private int getTamanioPersonalizado() // A futuro debe preguntar al usuario el tamaño
+	private JFrame ventanaNueva()
 	{
-		return 7;
+		JFrame nueva = new JFrame();
+		nueva.getContentPane().setLayout(null);
+		nueva.setResizable(false); // cambio de tamaño no permitido
+		return nueva;
 	}
+	
+	private void pedirTamanioPersonalizado()
+	{ // 
+		int minCeldas = 2;
+		int maxCeldas = 12; // podrían ser constantes declaradas en la capa de negocios
+			
+		JFrame v = ventanaNueva();
+		int anchoVentana = 70 + (32 * (maxCeldas - minCeldas));
+		centrarVentana(v, anchoVentana, 190);
+		v.setVisible(true);
+		JLabel mensaje = new JLabel();
+		mensaje.setText("Tamaño de la cuadrícula:");
+		mensaje.setFont(new Font("Arial", Font.PLAIN, 13));
+		mensaje.setBounds((anchoVentana - 150) / 2, 15, 150, 25);
+		v.getContentPane().add(mensaje);
+
+		Dictionary<Integer, JLabel> dict = new Hashtable<>();
+		
+		for (int i = minCeldas; i <= maxCeldas; i++)
+		{
+			dict.put(i, new JLabel(String.valueOf(i)));
+		}
+		
+		JSlider deslizable = new JSlider(minCeldas, maxCeldas);
+		deslizable.setBounds(35, 40, 30 * (maxCeldas - minCeldas), 50);
+		deslizable.setMajorTickSpacing(1);
+		deslizable.setPaintTicks(true);
+		deslizable.setLabelTable(dict);
+		deslizable.setPaintLabels(true);
+		deslizable.setSnapToTicks(true);
+		v.getContentPane().add(deslizable);
+		deslizable.setVisible(true);
+		
+		JButton aceptar = new JButton();
+		aceptar.setBounds((anchoVentana - 105) / 2, 105, 80, 30);
+		aceptar.setText("Aceptar");
+		v.add(aceptar);
+		aceptar.setVisible(true);
+		
+			aceptar.addActionListener(new ActionListener()
+			{
+				public void actionPerformed(ActionEvent e)
+				{	
+					tamanioPersonalizado = deslizable.getValue();
+					nuevoJuego(tamanioPersonalizado, tamanioPersonalizado * 50 + 60,
+							tamanioPersonalizado * 50 + 110);
+					ventanaPrincipal.setVisible(true);
+					v.dispose();
+				}
+			});
+    }
 	
 	private String digitosValidos()
 	{
