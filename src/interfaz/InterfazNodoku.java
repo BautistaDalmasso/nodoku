@@ -337,18 +337,18 @@ public class InterfazNodoku {
 			}
 			@Override
 			public void removeUpdate(DocumentEvent e) {
-				changedUpdate(e);
+				cambiarValorGrilla(0, x, y);
 			}
 			@Override
 			public void changedUpdate(DocumentEvent e) {
 				// Llamado cada vez que el contenido de una celda cambia.
-				if (!(celda.getText().equals(" ") || (celda.getText().equals(""))))
-				{
+				if (celda.getText().equals(" ")) {
+					cambiarValorGrilla(0, x, y);
+				}
+				else {
 					int valor = Integer.parseInt(celda.getText());
 					cambiarValorGrilla(valor, x, y);
 				}
-				
-//				System.out.println("TAMBIEN IMPLEMENTA ALGO PARA CHEQUEAR VALORES VALIDOS.");
 			}
 		});
 	}
