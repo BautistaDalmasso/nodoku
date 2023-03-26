@@ -22,6 +22,9 @@ public class VentanaGanador extends JFrame {
 	private InterfazNodoku interfaz;
 	private boolean registrado;
 
+	private final int NOMBRE_JUGADOR = 0;
+	private final int TIEMPO_MS = 1;
+	
 	/**
 	 * Create the frame.
 	 */
@@ -104,12 +107,7 @@ public class VentanaGanador extends JFrame {
 	}
 
 	public void setTiempo(Long ms) {
-		Long segundos = ms / 1000;
-		Long minutos = segundos / 60; segundos = segundos % 60;
-		Long horas = minutos / 60; minutos = minutos % 60;
-		
-		tiempoLabel.setText(String.format("%02d:%02d:%02d", 
-											horas, minutos, segundos));
+		tiempoLabel.setText(milisegundosAhms(ms));
 	}
 
 	public void registroExitoso() {
@@ -125,9 +123,19 @@ public class VentanaGanador extends JFrame {
 		modeloRanking.addColumn("Tiempo");
 		
 		for (String[] parJugadorTiempo : interfaz.juego.getTop10Ranking()) {
-			modeloRanking.addRow(parJugadorTiempo);
+			modeloRanking.addRow(new String[] 
+					{parJugadorTiempo[NOMBRE_JUGADOR], 
+							milisegundosAhms(Long.parseLong(parJugadorTiempo[TIEMPO_MS]))});
 		}
 		
 		tablaRanking.setModel(modeloRanking);
+	}
+	
+	private static String milisegundosAhms(Long ms) {
+		Long segundos = ms / 1000;
+		Long minutos = segundos / 60; segundos = segundos % 60;
+		Long horas = minutos / 60; minutos = minutos % 60;
+		
+		return String.format("%02d:%02d:%02d", horas, minutos, segundos);
 	}
 }
