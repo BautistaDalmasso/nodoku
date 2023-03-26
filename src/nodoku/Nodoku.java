@@ -40,12 +40,12 @@ public class Nodoku {
 		sumasEsperadasPorColumna = new int[anchoGrilla];
 		sumasEsperadasPorFila = new int[largoGrilla];
 		
-		for(int columna=0; columna<anchoGrilla; columna++) {
-			for(int fila=0; fila<largoGrilla; fila++) {
+		for(int y=0; y<anchoGrilla; y++) {
+			for(int x=0; x<largoGrilla; x++) {
 				int numeroCelda = rand.nextInt(1, valorMaximoCelda + 1);
 				
-				sumasEsperadasPorColumna[columna] += numeroCelda;
-				sumasEsperadasPorFila[fila] += numeroCelda;
+				sumasEsperadasPorColumna[x] += numeroCelda;
+				sumasEsperadasPorFila[y] += numeroCelda;
 			}
 		}
 	}
