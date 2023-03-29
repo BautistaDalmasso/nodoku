@@ -40,12 +40,12 @@ public class Nodoku {
 		sumasEsperadasPorColumna = new int[anchoGrilla];
 		sumasEsperadasPorFila = new int[largoGrilla];
 		
-		for(int columna=0; columna<anchoGrilla; columna++) {
-			for(int fila=0; fila<largoGrilla; fila++) {
+		for(int y=0; y<anchoGrilla; y++) {
+			for(int x=0; x<largoGrilla; x++) {
 				int numeroCelda = rand.nextInt(1, valorMaximoCelda + 1);
 				
-				sumasEsperadasPorColumna[columna] += numeroCelda;
-				sumasEsperadasPorFila[fila] += numeroCelda;
+				sumasEsperadasPorColumna[x] += numeroCelda;
+				sumasEsperadasPorFila[y] += numeroCelda;
 			}
 		}
 	}
@@ -103,12 +103,12 @@ public class Nodoku {
 	public boolean chequearJuegoResuelto()
 	{
 		boolean juegoResuelto = true;
-		for (int x = 0; x < anchoGrilla - 1; x++)
+		for (int x = 0; x < anchoGrilla; x++)
 		{
 			juegoResuelto = juegoResuelto && 
 			columnaEstaResuelta(x);
 		}
-		for (int y = 0; y < largoGrilla - 1; y++)
+		for (int y = 0; y < largoGrilla; y++)
 		{
 			juegoResuelto = juegoResuelto && 
 			filaEstaResuelta(y);

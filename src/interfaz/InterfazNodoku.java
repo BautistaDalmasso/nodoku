@@ -45,6 +45,8 @@ public class InterfazNodoku {
 	
 	private final Color COLOR_CORRECTO = Color.green;
 	private final Color COLOR_DEFAULT = Color.white;
+	private final Color COLOR_TEXTO = Color.black;
+	private final Color COLOR_TEXTO_CORRECTO = new Color(10,221,8);
 	private final int TAMANIO_FACIL = 4;
 	private final int TAMANIO_MEDIO = 6;
 	private final int TAMANIO_DIFICIL = 8;
@@ -256,7 +258,6 @@ public class InterfazNodoku {
 	
 	private void cambiarValorGrilla(int valor, int x, int y) {
 		juego.cambiarValorGrilla(valor, x, y);
-		
 		if (juego.filaEstaResuelta(y)) {
 //			System.out.println("Fila resuelta.");
 			filasResueltas[y] = true;
@@ -292,14 +293,15 @@ public class InterfazNodoku {
 		{
 			if (sumaCorrecta) {
 				casilleros[y][x].setBackground(COLOR_CORRECTO);
+				sumasEsperadasPorFila[y].setForeground(COLOR_TEXTO_CORRECTO);
 			} else {
 				if (!columnasResueltas[x])
 				{
 					casilleros[y][x].setBackground(COLOR_DEFAULT);
+					sumasEsperadasPorFila[y].setForeground(COLOR_TEXTO);
 				}
 			}
 		}
-		
 	}
 	
 	private void setColorColumna(int x, boolean sumaCorrecta)
@@ -309,10 +311,12 @@ public class InterfazNodoku {
 			if (sumaCorrecta)
 			{
 				casilleros[y][x].setBackground(COLOR_CORRECTO);
+				sumasEsperadasPorColumna[x].setForeground(COLOR_TEXTO_CORRECTO);
 			} else {
 				if (!filasResueltas[y])
 				{
 					casilleros[y][x].setBackground(COLOR_DEFAULT);
+					sumasEsperadasPorColumna[x].setForeground(COLOR_TEXTO);
 				}
 			}
 		}
@@ -360,22 +364,22 @@ public class InterfazNodoku {
 		sumasEsperadasPorColumna = new Label[columnas.length];
 		sumasEsperadasPorFila = new Label[filas.length];
 		
-		for (int c = 0; c < columnas.length; c ++)
+		for (int y = 0; y < columnas.length; y ++)
 		{
-			sumasEsperadasPorColumna[c] = new Label(Integer.toString(filas[c]));
-			sumasEsperadasPorColumna[c].setBounds(filas.length * 50, c * 50, 50, 50);
-			sumasEsperadasPorColumna[c].setAlignment(1);
-			sumasEsperadasPorColumna[c].setFont(new Font("Arial", Font.PLAIN, 17));
-			ventanaPrincipal.getContentPane().add(sumasEsperadasPorColumna[c]);
+			sumasEsperadasPorFila[y] = new Label(Integer.toString(filas[y]));
+			sumasEsperadasPorFila[y].setBounds(filas.length * 50, y * 50, 50, 50);
+			sumasEsperadasPorFila[y].setAlignment(1);
+			sumasEsperadasPorFila[y].setFont(new Font("Arial", Font.PLAIN, 17));
+			ventanaPrincipal.getContentPane().add(sumasEsperadasPorFila[y]);
 		}
 		
-		for (int f = 0; f < filas.length; f ++)
+		for (int x = 0; x < filas.length; x ++)
 		{
-			sumasEsperadasPorFila[f] = new Label(Integer.toString(columnas[f]));
-			sumasEsperadasPorFila[f].setBounds(f * 50, columnas.length * 50, 50, 50);
-			sumasEsperadasPorFila[f].setAlignment(1);
-			sumasEsperadasPorFila[f].setFont(new Font("Arial", Font.PLAIN, 17));
-			ventanaPrincipal.getContentPane().add(sumasEsperadasPorFila[f]);
+			sumasEsperadasPorColumna[x] = new Label(Integer.toString(columnas[x]));
+			sumasEsperadasPorColumna[x].setBounds(x * 50, columnas.length * 50, 50, 50);
+			sumasEsperadasPorColumna[x].setAlignment(1);
+			sumasEsperadasPorColumna[x].setFont(new Font("Arial", Font.PLAIN, 17));
+			ventanaPrincipal.getContentPane().add(sumasEsperadasPorColumna[x]);
 		}
 	}
 	
