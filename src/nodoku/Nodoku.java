@@ -103,12 +103,12 @@ public class Nodoku {
 	public boolean chequearJuegoResuelto()
 	{
 		boolean juegoResuelto = true;
-		for (int x = 0; x < anchoGrilla - 1; x++)
+		for (int x = 0; x < anchoGrilla; x++)
 		{
 			juegoResuelto = juegoResuelto && 
 			columnaEstaResuelta(x);
 		}
-		for (int y = 0; y < largoGrilla - 1; y++)
+		for (int y = 0; y < largoGrilla; y++)
 		{
 			juegoResuelto = juegoResuelto && 
 			filaEstaResuelta(y);
