@@ -138,7 +138,7 @@ public class InterfazNodoku {
 		juego = new Nodoku(tamanio);
 		filasResueltas = new boolean[tamanio];
 		columnasResueltas = new boolean[tamanio];
-		setearVentana(ancho, alto);
+		centrarVentana(ventanaPrincipal, ancho, alto);
 		crearCasilleros(tamanio);
 		mostrarValoresEsperados();
 		
@@ -221,11 +221,6 @@ public class InterfazNodoku {
 		System.exit(0);
 	}
 
-	private void setearVentana(int ancho, int alto)
-	{
-		centrarVentana(ventanaPrincipal, ancho, alto);
-	}
-	
 	private void centrarVentana(JFrame ventana, int ancho, int alto)
 	{
 		int ancho_pantalla = getAnchoPantalla();
