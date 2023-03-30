@@ -135,10 +135,12 @@ public class VentanaGanador extends JFrame {
 		modeloRanking.addColumn("Jugador");
 		modeloRanking.addColumn("Tiempo");
 		
+		int posicion = 1;
 		for (String[] parJugadorTiempo : interfaz.juego.getTop10Ranking()) {
 			modeloRanking.addRow(new String[] 
-					{parJugadorTiempo[NOMBRE_JUGADOR], 
+					{String.format("%dº. %s", posicion, parJugadorTiempo[NOMBRE_JUGADOR]), 
 							milisegundosAhms(Long.parseLong(parJugadorTiempo[TIEMPO_MS]))});
+			posicion++;
 		}
 		
 		tablaRanking.setModel(modeloRanking);
