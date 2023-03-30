@@ -162,35 +162,13 @@ public class InterfazNodoku {
 		/* Crea un menu deplegable con opciones. */
 		
 		JMenu mnNuevo = new JMenu("Nuevo juego");
-		JMenuItem mnNuevoItemFacil = new JMenuItem("Fácil");
-		mnNuevoItemFacil.addActionListener(new ActionListener()
-		{
-			public void actionPerformed(ActionEvent e)
-			{	
-				nuevoJuego(TAMANIO_FACIL, ANCHO_VENTANA_FACIL, ALTO_VENTANA_FACIL);
-			}
-		});
-		mnNuevo.add(mnNuevoItemFacil);
 		
-		JMenuItem mnNuevoItemMedio = new JMenuItem("Medio");
-		mnNuevoItemMedio.addActionListener(new ActionListener()
-		{
-			public void actionPerformed(ActionEvent e)
-			{
-				nuevoJuego(TAMANIO_MEDIO, ANCHO_VENTANA_MEDIO, ALTO_VENTANA_MEDIO);
-			}
-		});
-		mnNuevo.add(mnNuevoItemMedio);
-		
-		JMenuItem mnNuevoItemDificil = new JMenuItem("Difícil");
-		mnNuevoItemDificil.addActionListener(new ActionListener()
-		{
-			public void actionPerformed(ActionEvent e)
-			{
-				nuevoJuego(TAMANIO_DIFICIL, ANCHO_VENTANA_DIFICIL, ALTO_VENTANA_DIFICIL);
-			}
-		});
-		mnNuevo.add(mnNuevoItemDificil);
+		crearBotonParaMenu(mnNuevo, "Fácil", 
+				TAMANIO_FACIL, ANCHO_VENTANA_FACIL, ALTO_VENTANA_FACIL);
+		crearBotonParaMenu(mnNuevo, "Medio",
+				TAMANIO_MEDIO, ANCHO_VENTANA_MEDIO, ALTO_VENTANA_MEDIO);
+		crearBotonParaMenu(mnNuevo, "Díficil",
+				TAMANIO_DIFICIL, ANCHO_VENTANA_DIFICIL, ALTO_VENTANA_DIFICIL);
 		
 		JMenuItem mnNuevoItemPersonalizado = new JMenuItem("Personalizado");
 		mnNuevoItemPersonalizado.addActionListener(new ActionListener()
@@ -214,6 +192,20 @@ public class InterfazNodoku {
 		mnNuevo.add(mnNuevoItemSalir);
 		
 		return mnNuevo;
+	}
+	
+	private void crearBotonParaMenu(JMenu menu, String nombre, int tamanio, int ancho, int alto) {
+		JMenuItem nuevoBotonMenu = new JMenuItem(nombre);
+		
+		nuevoBotonMenu.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e)
+			{
+				nuevoJuego(tamanio, ancho, alto);
+			}
+		});
+		
+		menu.add(nuevoBotonMenu);
 	}
 	
 	protected void salir() {
