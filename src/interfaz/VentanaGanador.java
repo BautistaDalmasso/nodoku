@@ -12,6 +12,7 @@ import javax.swing.JTable;
 import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
 import javax.swing.JButton;
+//import interfaz.InterfazNodoku;
 
 public class VentanaGanador extends JFrame {
 	private static final long serialVersionUID = 4351125225212137569L;
@@ -30,10 +31,12 @@ public class VentanaGanador extends JFrame {
 	 */
 	public VentanaGanador(InterfazNodoku interfaz) {		
 		this.interfaz = interfaz;
+		setResizable(false);
 		registrado = false;
 		
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-		setBounds(100, 100, 450, 300);
+		setBounds(centroHorizontalSegunAncho(450) , 
+				centroVerticalSegunAlto(400) , 450, 400);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(null);
@@ -45,17 +48,17 @@ public class VentanaGanador extends JFrame {
 		contentPane.add(ganasteLabel);
 		
 		JLabel tuTiempoLabel = new JLabel("Tu tiempo:");
-		tuTiempoLabel.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		tuTiempoLabel.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		tuTiempoLabel.setBounds(10, 69, 79, 20);
 		contentPane.add(tuTiempoLabel);
 		
 		tiempoLabel = new JLabel("00:00:00");
-		tiempoLabel.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		tiempoLabel.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		tiempoLabel.setBounds(85, 69, 58, 20);
 		contentPane.add(tiempoLabel);
 		
 		JScrollPane scrollRanking = new JScrollPane();
-		scrollRanking.setBounds(10, 105, 400, 120);
+		scrollRanking.setBounds(10, 105, 400, 186);
 		contentPane.add(scrollRanking);
 		
 		inicializarTablaRanking();
@@ -69,7 +72,7 @@ public class VentanaGanador extends JFrame {
 		contentPane.add(rankingLabel);
 		
 		JButton btnNuevoJuego = new JButton("Nuevo Juego");
-		btnNuevoJuego.setBounds(85, 227, 114, 23);
+		btnNuevoJuego.setBounds(85, 300, 114, 23);
 		btnNuevoJuego.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -80,7 +83,7 @@ public class VentanaGanador extends JFrame {
 		contentPane.add(btnNuevoJuego);
 		
 		JButton btnTerminarJuego = new JButton("Terminar Juego");
-		btnTerminarJuego.setBounds(209, 227, 114, 23);
+		btnTerminarJuego.setBounds(209, 300, 114, 23);
 		btnTerminarJuego.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -104,6 +107,16 @@ public class VentanaGanador extends JFrame {
 		
 		this.setVisible(false);
 		this.setAlwaysOnTop(true);
+	}
+
+	int centroHorizontalSegunAncho(int ancho)
+	{
+		return (interfaz.getAnchoPantalla() - ancho) / 2;
+	}
+	
+	int centroVerticalSegunAlto(int alto)
+	{
+		return (interfaz.getAltoPantalla() - alto) / 2;
 	}
 
 	public void setTiempo(Long ms) {
