@@ -170,26 +170,7 @@ public class InterfazNodoku {
 		crearBotonParaMenu(mnNuevo, "Díficil",
 				TAMANIO_DIFICIL, ANCHO_VENTANA_DIFICIL, ALTO_VENTANA_DIFICIL);
 		
-		JMenuItem mnNuevoItemPersonalizado = new JMenuItem("Personalizado");
-		mnNuevoItemPersonalizado.addActionListener(new ActionListener()
-		{
-			public void actionPerformed(ActionEvent e)
-			{
-				ventanaPrincipal.setVisible(false);
-				pedirTamanioPersonalizado();
-			}
-		});
-		mnNuevo.add(mnNuevoItemPersonalizado);
-		
-		JMenuItem mnNuevoItemSalir = new JMenuItem("Salir");
-		mnNuevoItemSalir.addActionListener(new ActionListener()
-		{
-			public void actionPerformed(ActionEvent e)
-			{
-				salir();
-			}	
-		});
-		mnNuevo.add(mnNuevoItemSalir);
+		crearMenuItemTamanioPersonalizado(mnNuevo);
 		
 		return mnNuevo;
 	}
@@ -206,6 +187,19 @@ public class InterfazNodoku {
 		});
 		
 		menu.add(nuevoBotonMenu);
+	}
+	
+	private void crearMenuItemTamanioPersonalizado(JMenu menu) {
+		JMenuItem mnNuevoItemPersonalizado = new JMenuItem("Personalizado");
+		mnNuevoItemPersonalizado.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e)
+			{
+				ventanaPrincipal.setVisible(false);
+				pedirTamanioPersonalizado();
+			}
+		});
+		menu.add(mnNuevoItemPersonalizado);
 	}
 	
 	protected void salir() {
