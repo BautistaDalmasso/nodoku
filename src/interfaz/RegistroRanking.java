@@ -24,8 +24,9 @@ public class RegistroRanking extends JDialog {
 		this.interfaz = interfaz;
 		setResizable(false);
 		this.setAlwaysOnTop(true);
-				
-		setBounds(100, 100, 321, 120);
+	
+		setBounds((interfaz.getAnchoPantalla() - 321) / 2, 
+				(interfaz.getAltoPantalla() - 120) / 2, 321, 120);
 		getContentPane().setLayout(null);
 		contentPanel.setBounds(0, 0, 305, 81);
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
