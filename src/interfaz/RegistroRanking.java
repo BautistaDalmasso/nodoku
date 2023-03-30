@@ -21,6 +21,54 @@ public class RegistroRanking extends JDialog {
 	 * Create the dialog.
 	 */
 	public RegistroRanking(InterfazNodoku interfaz) {
+		inicializarVentana(interfaz);
+		
+		crearLabelIngreseSuNombre();
+		inicializarFieldParaNombre();
+		
+		crearBotonListo();
+		crearBotonCancelar();
+	}
+
+	private void inicializarFieldParaNombre() {
+		nombreField = new JTextField();
+		nombreField.setBounds(148, 11, 141, 20);
+		contentPanel.add(nombreField);
+		nombreField.setColumns(10);
+	}
+
+	private void crearBotonCancelar() {
+		JButton btnCancelar = new JButton("Cancelar");
+		btnCancelar.setBounds(158, 45, 89, 23);
+		btnCancelar.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				ocultarVentana();
+			}
+		});
+		contentPanel.add(btnCancelar);
+	}
+
+	private void crearBotonListo() {
+		JButton btnListo = new JButton("Listo");
+		btnListo.setBounds(50, 45, 89, 23);
+		btnListo.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				manejarRegistro();
+			}
+		});
+		contentPanel.add(btnListo);
+	}
+
+	private void crearLabelIngreseSuNombre() {
+		JLabel lblIngreseSuNombre = new JLabel("Ingrese su nombre:");
+		lblIngreseSuNombre.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		lblIngreseSuNombre.setBounds(10, 11, 141, 23);
+		contentPanel.add(lblIngreseSuNombre);
+	}
+
+	private void inicializarVentana(InterfazNodoku interfaz) {
 		this.interfaz = interfaz;
 		setResizable(false);
 		this.setAlwaysOnTop(true);
@@ -35,36 +83,6 @@ public class RegistroRanking extends JDialog {
 		this.setVisible(false);
 		
 		contentPanel.setLayout(null);
-		
-		JLabel lblIngreseSuNombre = new JLabel("Ingrese su nombre:");
-		lblIngreseSuNombre.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		lblIngreseSuNombre.setBounds(10, 11, 141, 23);
-		contentPanel.add(lblIngreseSuNombre);
-		
-		nombreField = new JTextField();
-		nombreField.setBounds(148, 11, 141, 20);
-		contentPanel.add(nombreField);
-		nombreField.setColumns(10);
-		
-		JButton btnListo = new JButton("Listo");
-		btnListo.setBounds(50, 45, 89, 23);
-		btnListo.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				manejarRegistro();
-			}
-		});
-		contentPanel.add(btnListo);
-		
-		JButton btnCancelar = new JButton("Cancelar");
-		btnCancelar.setBounds(158, 45, 89, 23);
-		btnCancelar.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				ocultarVentana();
-			}
-		});
-		contentPanel.add(btnCancelar);
 	}
 
 	protected void manejarRegistro() {
