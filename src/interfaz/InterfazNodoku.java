@@ -466,14 +466,14 @@ public class InterfazNodoku {
 		
 	}
 	
-	private int getAnchoPantalla()
+	int getAnchoPantalla()
 	{
 		// Lee el ancho de la resolución de la pantalla del dispositivo
 		Dimension resolucionPantalla = Toolkit.getDefaultToolkit().getScreenSize();
 		return resolucionPantalla.width;
 	}	
 	
-	private int getAltoPantalla()
+	int getAltoPantalla()
 	{
 		// Lee el ancho de la resolución de la pantalla del dispositivo
 		Dimension resolucionPantalla = Toolkit.getDefaultToolkit().getScreenSize();
