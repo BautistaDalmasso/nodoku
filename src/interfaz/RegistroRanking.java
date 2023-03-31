@@ -85,7 +85,7 @@ public class RegistroRanking extends JDialog {
 		contentPanel.setLayout(null);
 	}
 
-	protected void manejarRegistro() {
+	void manejarRegistro() {
 		String nombre = nombreField.getText();
 		
 		if (!nombre.equals("")) {
@@ -96,7 +96,7 @@ public class RegistroRanking extends JDialog {
 		}
 	}
 	
-	protected void ocultarVentana() {
+	void ocultarVentana() {
 		interfaz.ventanaGanador.setEnabled(true);
 		interfaz.registroRanking.setVisible(false);
 	}
