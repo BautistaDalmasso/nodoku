@@ -5,10 +5,8 @@ import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.Label;
 import java.awt.Toolkit;
-import javax.swing.JButton;
 import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JMenuBar;
 import javax.swing.JMenu;
 import javax.swing.UIManager;
@@ -19,16 +17,13 @@ import javax.swing.JTextField;
 import java.awt.Color;
 import java.awt.Dimension;
 import javax.swing.JMenuItem;
-import javax.swing.JSlider;
 import java.awt.event.ActionListener;
-import java.util.Dictionary;
-import java.util.Hashtable;
 import java.awt.event.ActionEvent;
 
 
 public class InterfazNodoku {
-	protected Nodoku juego;
-	protected JFrame ventanaPrincipal;
+	Nodoku juego;
+	JFrame ventanaPrincipal;
 	private JTextField casilleros[][];
 	private String cadenaDigitosValidos;
 	private Label sumasEsperadasPorFila[];
@@ -36,8 +31,8 @@ public class InterfazNodoku {
 	private boolean filasResueltas[];
 	private boolean columnasResueltas[];
 	
-	protected VentanaGanador ventanaGanador;
-	protected RegistroRanking registroRanking;
+	VentanaGanador ventanaGanador;
+	RegistroRanking registroRanking;
 	
 	int ultimoTamanio;
 	int ultimoAncho;
@@ -50,7 +45,7 @@ public class InterfazNodoku {
 	private final int TAMANIO_FACIL = 4;
 	private final int TAMANIO_MEDIO = 6;
 	private final int TAMANIO_DIFICIL = 8;
-	private int tamanioPersonalizado;
+	int tamanioPersonalizado;
 	private final int ALTO_VENTANA_FACIL = 310;
 	private final int ANCHO_VENTANA_FACIL = 260;
 	private final int ALTO_VENTANA_MEDIO = 410;
@@ -123,7 +118,7 @@ public class InterfazNodoku {
 		barraMenu.add(crearMenuDesplegable());
 	}
 	
-	protected void nuevoJuego(int tamanio, int ancho, int alto)
+	void nuevoJuego(int tamanio, int ancho, int alto)
 	{	
 		limpiarVentana();
 		
@@ -153,7 +148,7 @@ public class InterfazNodoku {
 		ventanaGanador = new VentanaGanador(this);
 	}
 	
-	protected void nuevoJuego() 
+	void nuevoJuego() 
 	{
 		nuevoJuego(ultimoTamanio, ultimoAncho, ultimoAlto);
 	}
@@ -162,66 +157,54 @@ public class InterfazNodoku {
 		/* Crea un menu deplegable con opciones. */
 		
 		JMenu mnNuevo = new JMenu("Nuevo juego");
-		JMenuItem mnNuevoItemFacil = new JMenuItem("Fácil");
-		mnNuevoItemFacil.addActionListener(new ActionListener()
-		{
-			public void actionPerformed(ActionEvent e)
-			{	
-				nuevoJuego(TAMANIO_FACIL, ANCHO_VENTANA_FACIL, ALTO_VENTANA_FACIL);
-			}
-		});
-		mnNuevo.add(mnNuevoItemFacil);
 		
-		JMenuItem mnNuevoItemMedio = new JMenuItem("Medio");
-		mnNuevoItemMedio.addActionListener(new ActionListener()
-		{
-			public void actionPerformed(ActionEvent e)
-			{
-				nuevoJuego(TAMANIO_MEDIO, ANCHO_VENTANA_MEDIO, ALTO_VENTANA_MEDIO);
-			}
-		});
-		mnNuevo.add(mnNuevoItemMedio);
+		crearBotonParaMenu(mnNuevo, "Fácil", 
+				TAMANIO_FACIL, ANCHO_VENTANA_FACIL, ALTO_VENTANA_FACIL);
+		crearBotonParaMenu(mnNuevo, "Medio",
+				TAMANIO_MEDIO, ANCHO_VENTANA_MEDIO, ALTO_VENTANA_MEDIO);
+		crearBotonParaMenu(mnNuevo, "Díficil",
+				TAMANIO_DIFICIL, ANCHO_VENTANA_DIFICIL, ALTO_VENTANA_DIFICIL);
 		
-		JMenuItem mnNuevoItemDificil = new JMenuItem("Difícil");
-		mnNuevoItemDificil.addActionListener(new ActionListener()
+		crearMenuItemTamanioPersonalizado(mnNuevo);
+		
+		return mnNuevo;
+	}
+	
+	private void crearBotonParaMenu(JMenu menu, String nombre, int tamanio, int ancho, int alto) {
+		JMenuItem nuevoBotonMenu = new JMenuItem(nombre);
+		
+		nuevoBotonMenu.addActionListener(new ActionListener()
 		{
 			public void actionPerformed(ActionEvent e)
 			{
-				nuevoJuego(TAMANIO_DIFICIL, ANCHO_VENTANA_DIFICIL, ALTO_VENTANA_DIFICIL);
+				nuevoJuego(tamanio, ancho, alto);
 			}
 		});
-		mnNuevo.add(mnNuevoItemDificil);
 		
+		menu.add(nuevoBotonMenu);
+	}
+	
+	private void crearMenuItemTamanioPersonalizado(JMenu menu) {
 		JMenuItem mnNuevoItemPersonalizado = new JMenuItem("Personalizado");
+		
+		InterfazNodoku interfaz = this;
 		mnNuevoItemPersonalizado.addActionListener(new ActionListener()
 		{
 			public void actionPerformed(ActionEvent e)
 			{
 				ventanaPrincipal.setVisible(false);
-				pedirTamanioPersonalizado();
+				new VentanaTamanioPersonalizado(interfaz);
 			}
 		});
-		mnNuevo.add(mnNuevoItemPersonalizado);
-		
-		JMenuItem mnNuevoItemSalir = new JMenuItem("Salir");
-		mnNuevoItemSalir.addActionListener(new ActionListener()
-		{
-			public void actionPerformed(ActionEvent e)
-			{
-				salir();
-			}	
-		});
-		mnNuevo.add(mnNuevoItemSalir);
-		
-		return mnNuevo;
+		menu.add(mnNuevoItemPersonalizado);
 	}
 	
-	protected void salir() {
+	void salir() {
 		juego.guardarRanking();
 		System.exit(0);
 	}
 
-	private void centrarVentana(JFrame ventana, int ancho, int alto)
+	static void centrarVentana(JFrame ventana, int ancho, int alto)
 	{
 		int ancho_pantalla = getAnchoPantalla();
 		int alto_pantalla  = getAltoPantalla();
@@ -254,7 +237,6 @@ public class InterfazNodoku {
 	private void cambiarValorGrilla(int valor, int x, int y) {
 		juego.cambiarValorGrilla(valor, x, y);
 		if (juego.filaEstaResuelta(y)) {
-//			System.out.println("Fila resuelta.");
 			filasResueltas[y] = true;
 			setColorFila(y, true);
 		} else {
@@ -262,7 +244,6 @@ public class InterfazNodoku {
 			setColorFila(y, false);
 		}
 		if (juego.columnaEstaResuelta(x)) {
-//			System.out.println("Columna resuelta.");
 			columnasResueltas[x] = true;
 			setColorColumna(x, true);
 		} else {
@@ -386,57 +367,6 @@ public class InterfazNodoku {
 		return nueva;
 	}
 	
-	private void pedirTamanioPersonalizado()
-	{ // 
-		int minCeldas = 2;
-		int maxCeldas = 12; // podrían ser constantes declaradas en la capa de negocios
-			
-		JFrame v = ventanaNueva();
-		int anchoVentana = 70 + (32 * (maxCeldas - minCeldas));
-		centrarVentana(v, anchoVentana, 190);
-		v.setVisible(true);
-		JLabel mensaje = new JLabel();
-		mensaje.setText("Tamaño de la cuadrícula:");
-		mensaje.setFont(new Font("Arial", Font.PLAIN, 13));
-		mensaje.setBounds((anchoVentana - 150) / 2, 15, 150, 25);
-		v.getContentPane().add(mensaje);
-
-		Dictionary<Integer, JLabel> dict = new Hashtable<>();
-		
-		for (int i = minCeldas; i <= maxCeldas; i++)
-		{
-			dict.put(i, new JLabel(String.valueOf(i)));
-		}
-		
-		JSlider deslizable = new JSlider(minCeldas, maxCeldas);
-		deslizable.setBounds(35, 40, 30 * (maxCeldas - minCeldas), 50);
-		deslizable.setMajorTickSpacing(1);
-		deslizable.setPaintTicks(true);
-		deslizable.setLabelTable(dict);
-		deslizable.setPaintLabels(true);
-		deslizable.setSnapToTicks(true);
-		v.getContentPane().add(deslizable);
-		deslizable.setVisible(true);
-		
-		JButton aceptar = new JButton();
-		aceptar.setBounds((anchoVentana - 105) / 2, 105, 80, 30);
-		aceptar.setText("Aceptar");
-		v.add(aceptar);
-		aceptar.setVisible(true);
-		
-			aceptar.addActionListener(new ActionListener()
-			{
-				public void actionPerformed(ActionEvent e)
-				{	
-					tamanioPersonalizado = deslizable.getValue();
-					nuevoJuego(tamanioPersonalizado, tamanioPersonalizado * 50 + 60,
-							tamanioPersonalizado * 50 + 110);
-					ventanaPrincipal.setVisible(true);
-					v.dispose();
-				}
-			});
-    }
-	
 	private String digitosValidos()
 	{
 		StringBuilder cadena = new StringBuilder();
@@ -480,14 +410,14 @@ public class InterfazNodoku {
 		
 	}
 	
-	int getAnchoPantalla()
+	static int getAnchoPantalla()
 	{
 		// Lee el ancho de la resolución de la pantalla del dispositivo
 		Dimension resolucionPantalla = Toolkit.getDefaultToolkit().getScreenSize();
 		return resolucionPantalla.width;
 	}	
 	
-	int getAltoPantalla()
+	static int getAltoPantalla()
 	{
 		// Lee el ancho de la resolución de la pantalla del dispositivo
 		Dimension resolucionPantalla = Toolkit.getDefaultToolkit().getScreenSize();
