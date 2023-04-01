@@ -401,16 +401,11 @@ public class InterfazNodoku {
 	
 	public void borrarConsigna()
 	{
-		for (int c = 0; c < sumasEsperadasPorColumna.length; c ++)
+		for (int i = 0; i < ultimoTamanio; i ++)
 		{
-			ventanaPrincipal.getContentPane().remove(sumasEsperadasPorColumna[c]);
-		}
-		
-		for (int f = 0; f < sumasEsperadasPorFila.length; f ++)
-		{
-			ventanaPrincipal.getContentPane().remove(sumasEsperadasPorFila[f]);
-		}
-		
+			ventanaPrincipal.getContentPane().remove(sumasEsperadasPorColumna[i]);
+			ventanaPrincipal.getContentPane().remove(sumasEsperadasPorFila[i]);
+		}		
 	}
 	
 	static int getAnchoPantalla()
