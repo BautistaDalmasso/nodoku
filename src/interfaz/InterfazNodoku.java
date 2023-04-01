@@ -340,23 +340,26 @@ public class InterfazNodoku {
 		sumasEsperadasPorColumna = new Label[columnas.length];
 		sumasEsperadasPorFila = new Label[filas.length];
 		
-		for (int y = 0; y < columnas.length; y ++)
+		for (int i = 0; i < columnas.length; i ++)
+			// columnas o filas da igual: la matriz es cuadrada
 		{
-			sumasEsperadasPorFila[y] = new Label(Integer.toString(filas[y]));
-			sumasEsperadasPorFila[y].setBounds(filas.length * 50, y * 50, 50, 50);
-			sumasEsperadasPorFila[y].setAlignment(1);
-			sumasEsperadasPorFila[y].setFont(new Font("Arial", Font.PLAIN, 17));
-			ventanaPrincipal.getContentPane().add(sumasEsperadasPorFila[y]);
+			sumasEsperadasPorFila[i] = 
+					agregarSumaEsperada(Integer.toString(filas[i]),
+							filas.length * 50, i * 50);
+			sumasEsperadasPorColumna[i] = 
+					agregarSumaEsperada(Integer.toString(columnas[i]),
+							i * 50, columnas.length * 50);
 		}
-		
-		for (int x = 0; x < filas.length; x ++)
-		{
-			sumasEsperadasPorColumna[x] = new Label(Integer.toString(columnas[x]));
-			sumasEsperadasPorColumna[x].setBounds(x * 50, columnas.length * 50, 50, 50);
-			sumasEsperadasPorColumna[x].setAlignment(1);
-			sumasEsperadasPorColumna[x].setFont(new Font("Arial", Font.PLAIN, 17));
-			ventanaPrincipal.getContentPane().add(sumasEsperadasPorColumna[x]);
-		}
+	}
+	
+	private Label agregarSumaEsperada(String valor, int x, int y)
+	{	
+		Label nuevaSuma = new Label(valor);
+		nuevaSuma.setAlignment(1);
+		nuevaSuma.setFont(new Font("Arial", Font.PLAIN, 17));
+		nuevaSuma.setBounds(x, y, 50, 50);
+		ventanaPrincipal.getContentPane().add(nuevaSuma);	
+		return nuevaSuma;
 	}
 	
 	private JFrame ventanaNueva()
