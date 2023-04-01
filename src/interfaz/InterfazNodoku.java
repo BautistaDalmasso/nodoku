@@ -337,18 +337,15 @@ public class InterfazNodoku {
 	{
 		int columnas[] = juego.getSumasEsperadasPorColumna();
 		int filas[] = juego.getSumasEsperadasPorFila();
-		sumasEsperadasPorColumna = new Label[columnas.length];
-		sumasEsperadasPorFila = new Label[filas.length];
+		sumasEsperadasPorColumna = new Label[ultimoTamanio];
+		sumasEsperadasPorFila = new Label[ultimoTamanio];
 		
-		for (int i = 0; i < columnas.length; i ++)
-			// columnas o filas da igual: la matriz es cuadrada
+		for (int i = 0; i < ultimoTamanio; i ++)
 		{
-			sumasEsperadasPorFila[i] = 
-					agregarSumaEsperada(Integer.toString(filas[i]),
-							filas.length * 50, i * 50);
+			sumasEsperadasPorFila[i] =
+			agregarSumaEsperada(Integer.toString(filas[i]),	ultimoTamanio * 50, i * 50);
 			sumasEsperadasPorColumna[i] = 
-					agregarSumaEsperada(Integer.toString(columnas[i]),
-							i * 50, columnas.length * 50);
+			agregarSumaEsperada(Integer.toString(columnas[i]), i * 50, ultimoTamanio * 50);
 		}
 	}
 	
