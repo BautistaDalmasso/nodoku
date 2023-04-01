@@ -11,11 +11,10 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JSlider;
 
-public class VentanaTamanioPersonalizado extends JFrame{
+public class VentanaTamanioPersonalizado extends JFrame {
 	private int anchoVentana;
 	private JSlider deslizable;
-	private InterfazNodoku interfaz;
-	
+	private InterfazNodoku interfaz;	
 	private final int MIN_CELDAS = 2;
 	private final int MAX_CELDAS = 12;
 	
@@ -31,9 +30,6 @@ public class VentanaTamanioPersonalizado extends JFrame{
 		crearBotonAceptar();
 	}
 	
-
-
-
 	private void inicializarVentana() {
 		getContentPane().setLayout(null);
 		setResizable(false); // cambio de tamaño no permitido
@@ -67,6 +63,7 @@ public class VentanaTamanioPersonalizado extends JFrame{
 		deslizable.setLabelTable(tablaDeLabels);
 		deslizable.setPaintLabels(true);
 		deslizable.setSnapToTicks(true);
+		deslizable.setValue(interfaz.ultimoTamanio);
 		getContentPane().add(deslizable);
 		deslizable.setVisible(true);		
 	}
