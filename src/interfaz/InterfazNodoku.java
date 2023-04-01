@@ -25,7 +25,6 @@ public class InterfazNodoku {
 	Nodoku juego;
 	JFrame ventanaPrincipal;
 	private JTextField casilleros[][];
-	private String cadenaDigitosValidos;
 	private Label sumasEsperadasPorFila[];
 	private Label sumasEsperadasPorColumna[];
 	private boolean filasResueltas[];
@@ -108,7 +107,6 @@ public class InterfazNodoku {
 		
 		// Al arrancar por primera vez, lo hace en modo fácil ************	
 		nuevoJuego(TAMANIO_FACIL, ANCHO_VENTANA_FACIL, ALTO_VENTANA_FACIL);
-		cadenaDigitosValidos = digitosValidos();
 		
 		// Crea barra menú ***********************************************
 		JMenuBar barraMenu = new JMenuBar();
