@@ -394,7 +394,7 @@ public class InterfazNodoku {
 		}	
 	}
 	
-	public void borrarConsigna()
+	private void borrarConsigna()
 	{
 		for (int i = 0; i < ultimoTamanio; i ++)
 		{
