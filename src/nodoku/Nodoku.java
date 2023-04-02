@@ -132,8 +132,6 @@ public class Nodoku {
 	private void manejarJuegoResuelto() {
 		Date tiempo = new Date();
 		tiempoDeCompletacion = tiempo.getTime() - tiempoDeInicio;
-		
-		System.out.println(tiempoDeCompletacion);
 	}
 	
 	public List<String[]> getTop10Ranking(){
