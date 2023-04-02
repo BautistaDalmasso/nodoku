@@ -2,13 +2,15 @@ package interfaz;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JFormattedTextField;
+import javax.swing.text.MaskFormatter;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
+import java.text.ParseException;
 import javax.swing.JTextField;
 
 public class RegistroRanking extends JDialog {
@@ -18,9 +20,7 @@ public class RegistroRanking extends JDialog {
 	private JTextField nombreField;
 	private InterfazNodoku interfaz;
 	
-	/**
-	 * Create the dialog.
-	 */
+	// Crea el diálogo
 	public RegistroRanking(InterfazNodoku interfaz) {
 		inicializarVentana(interfaz);
 		
@@ -32,10 +32,17 @@ public class RegistroRanking extends JDialog {
 	}
 
 	private void inicializarFieldParaNombre() {
-		nombreField = new JTextField();
+		
+		try {
+			MaskFormatter formato = new MaskFormatter("*".repeat(25));
+		nombreField = new JFormattedTextField(formato);
 		nombreField.setBounds(148, 11, 141, 20);
 		contentPanel.add(nombreField);
 		nombreField.setColumns(10);
+		
+		} catch (ParseException e1) {
+			e1.printStackTrace();
+		}	
 	}
 
 	private void crearBotonCancelar() {
@@ -74,8 +81,8 @@ public class RegistroRanking extends JDialog {
 		setResizable(false);
 		this.setAlwaysOnTop(true);
 	
-		setBounds((interfaz.getAnchoPantalla() - 321) / 2, 
-				(interfaz.getAltoPantalla() - 120) / 2, 321, 120);
+		setBounds((InterfazNodoku.getAnchoPantalla() - 321) / 2, 
+				(InterfazNodoku.getAltoPantalla() - 120) / 2, 321, 120);
 		getContentPane().setLayout(null);
 		contentPanel.setBounds(0, 0, 305, 81);
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -102,3 +109,4 @@ public class RegistroRanking extends JDialog {
 		interfaz.registroRanking.setVisible(false);
 	}
 }
+
