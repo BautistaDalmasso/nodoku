@@ -280,7 +280,7 @@ public class InterfazNodoku {
 	
 	private void setColorColumna(int x, boolean sumaCorrecta)
 	{
-	 	for (int y = 0; y < casilleros.length; y++)
+	 	for (int y = 0; y < ultimoTamanio; y++)
 		{
 			if (sumaCorrecta)
 			{
@@ -385,9 +385,9 @@ public class InterfazNodoku {
 	
 	private void borrarCasilleros()
 	{
-		for (int x = 0; x < casilleros.length; x++)
+		for (int x = 0; x < ultimoTamanio; x++)
 		{
-			for (int y = 0; y < casilleros.length; y++)
+			for (int y = 0; y < ultimoTamanio; y++)
 			{
 				ventanaPrincipal.getContentPane().remove(casilleros[y][x]);
 			}
