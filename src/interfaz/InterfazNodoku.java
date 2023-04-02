@@ -125,7 +125,6 @@ public class InterfazNodoku {
 		ultimoAlto = alto;
 		
 		if (juego != null) {
-			juego.guardarRanking();
 			juego.nuevoJuego(tamanio);
 		}
 		else {
