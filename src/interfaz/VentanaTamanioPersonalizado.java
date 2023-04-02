@@ -35,6 +35,7 @@ public class VentanaTamanioPersonalizado extends JFrame {
 	private void inicializarVentana() {
 		getContentPane().setLayout(null);
 		setResizable(false); // cambio de tamaño no permitido
+		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		
 		anchoVentana = 70 + (32 * (MAX_CELDAS - MIN_CELDAS));
 		InterfazNodoku.centrarVentana(this, anchoVentana, 190);
