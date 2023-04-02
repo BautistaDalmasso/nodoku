@@ -12,6 +12,8 @@ import javax.swing.JLabel;
 import javax.swing.JSlider;
 
 public class VentanaTamanioPersonalizado extends JFrame {
+	
+	private static final long serialVersionUID = 4351125225212137569L;
 	private int anchoVentana;
 	private JSlider deslizable;
 	private InterfazNodoku interfaz;	
