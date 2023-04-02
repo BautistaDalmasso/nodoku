@@ -13,6 +13,7 @@ import javax.swing.JTextField;
 
 public class RegistroRanking extends JDialog {
 
+	private static final long serialVersionUID = 4351125225212137569L;
 	private final JPanel contentPanel = new JPanel();
 	private JTextField nombreField;
 	private InterfazNodoku interfaz;
