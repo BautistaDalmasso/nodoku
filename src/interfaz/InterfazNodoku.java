@@ -126,9 +126,12 @@ public class InterfazNodoku {
 		
 		if (juego != null) {
 			juego.guardarRanking();
+			juego.nuevoJuego(tamanio);
+		}
+		else {
+			juego = new Nodoku(tamanio);
 		}
 		
-		juego = new Nodoku(tamanio);
 		filasResueltas = new boolean[tamanio];
 		columnasResueltas = new boolean[tamanio];
 		centrarVentana(ventanaPrincipal, ancho, alto);
