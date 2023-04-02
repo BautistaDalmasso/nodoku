@@ -3,6 +3,7 @@ package interfaz;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFormattedTextField;
+import javax.swing.JFrame;
 import javax.swing.text.MaskFormatter;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
@@ -80,7 +81,9 @@ public class RegistroRanking extends JDialog {
 		this.interfaz = interfaz;
 		setResizable(false);
 		this.setAlwaysOnTop(true);
-	
+		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+		agregarAccionAlCerrarVentana();
+		
 		setBounds((InterfazNodoku.getAnchoPantalla() - 321) / 2, 
 				(InterfazNodoku.getAltoPantalla() - 120) / 2, 321, 120);
 		getContentPane().setLayout(null);
@@ -93,6 +96,15 @@ public class RegistroRanking extends JDialog {
 		contentPanel.setLayout(null);
 	}
 
+	private void agregarAccionAlCerrarVentana() {
+		addWindowListener(new java.awt.event.WindowAdapter() {
+		    @Override
+		    public void windowClosing(java.awt.event.WindowEvent windowEvent) {
+		        ocultarVentana();
+		    }
+		});
+	}
+	
 	void manejarRegistro() {
 		String nombre = nombreField.getText();
 		

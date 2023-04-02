@@ -52,12 +52,22 @@ public class VentanaGanador extends JFrame {
 		registrado = false;
 		
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+		agregarAccionAlCerrarVentana();
 		setBounds(centroHorizontalSegunAncho(450) , 
 				centroVerticalSegunAlto(400) , 450, 400);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(null);
 		setContentPane(contentPane);
+	}
+
+	private void agregarAccionAlCerrarVentana() {
+		addWindowListener(new java.awt.event.WindowAdapter() {
+		    @Override
+		    public void windowClosing(java.awt.event.WindowEvent windowEvent) {
+		        nuevoJuego();
+		    }
+		});
 	}
 
 	private void crearLabelGanaste() {
@@ -103,11 +113,16 @@ public class VentanaGanador extends JFrame {
 		btnNuevoJuego.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				interfaz.ventanaPrincipal.setEnabled(true);
-				interfaz.nuevoJuego();
+				nuevoJuego();
 			}
+
 		});
 		contentPane.add(btnNuevoJuego);
+	}
+	
+	private void nuevoJuego() {
+		interfaz.ventanaPrincipal.setEnabled(true);
+		interfaz.nuevoJuego();
 	}
 
 	private void crearBotonTerminarJuego(InterfazNodoku interfaz) {
