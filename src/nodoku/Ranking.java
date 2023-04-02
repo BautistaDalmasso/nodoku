@@ -59,6 +59,7 @@ public class Ranking {
 	public List<String[]> getTop10Ranking() {
 		LinkedList<String[]> paresJugadorTiempo = new LinkedList<String[]>();
 		
+		mejoresTiempos.sort(null);
 		for (int i=0; i<10 && i<mejoresTiempos.size(); i++) {
 			Long tiempoDeCompletacion = mejoresTiempos.get(i);
 			String[] par = {jugadoresPorTiempo.get(tiempoDeCompletacion),

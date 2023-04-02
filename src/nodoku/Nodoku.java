@@ -20,6 +20,17 @@ public class Nodoku {
 	
 	public Nodoku(int tamanio) {
 		/* Crea un tablero de Nodoku cuadrado de tamanio x tamanio. */
+		nuevoJuego(tamanio);
+		
+		ranking = new Ranking();
+	}
+	
+	public void nuevoJuego(int tamanio) {
+		inicializarValores(tamanio);
+		generarJuego();
+	}
+
+	private void inicializarValores(int tamanio) {
 		anchoGrilla = tamanio;
 		largoGrilla = tamanio;
 		valorMaximoCelda = VALOR_MAXIMO_DEFECTO;
@@ -27,9 +38,6 @@ public class Nodoku {
 		
 		Date tiempo = new Date();
 		tiempoDeInicio = tiempo.getTime();
-		ranking = new Ranking();
-		
-		generarJuego();
 	}
 	
 	private void generarJuego()
